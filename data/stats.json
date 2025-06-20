@@ -1,0 +1,8 @@
+{
+  "total_papers": 100,
+  "papers_with_human_reviews": 100,
+  "papers_with_our_system": 100,
+  "papers_with_openreviewer": 100,
+  "papers_with_deepreviewer": 17,
+  "created_at": "2025-06-20"
+}
