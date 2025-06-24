@@ -1,0 +1,12 @@
+{
+  "access_codes": [
+    "NOVELTY2025",
+    "EVAL2025", 
+    "ICLR2025"
+  ],
+  "instructions": {
+    "deployment": "Update access codes before deployment",
+    "security": "These codes provide basic access control for public GitHub Pages deployment",
+    "distribution": "Share codes privately with authorized evaluators only"
+  }
+}

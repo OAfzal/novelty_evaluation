@@ -1,46 +1,44 @@
-// Static Evaluation System - Client-side Implementation
-class StaticEvaluationSystem {
+// Hybrid Static Evaluation System - Client-side Implementation
+class HybridEvaluationSystem {
     constructor() {
-        this.papers = null;
-        this.currentAssignment = null;
+        this.evaluatorId = null;
+        this.evaluatorSamples = null;
+        this.currentSampleIndex = 0;
+        this.currentSample = null;
         this.startTime = null;
         this.completedEvaluations = this.loadCompletedEvaluations();
+        this.assignmentConfig = null;
+        this.isAuthenticated = false;
         
-        // Evaluation categories
+        // Authentication settings (loaded from config)
+        this.validAccessCodes = [];
+        
+        // Updated evaluation categories from reference_comparison.py
         this.categories = {
-            "reasoning_alignment": {
-                "title": "Reasoning Alignment",
-                "description": "Which candidate better aligns with the reference's reasoning approach and logic?"
+            "novelty_reasoning_alignment": {
+                "title": "Novelty Reasoning Alignment",
+                "description": "Which assessment better captures the key novelty arguments and reasoning presented in the reference review?"
             },
-            "decision_alignment": {
-                "title": "Decision Alignment", 
-                "description": "Which candidate's conclusions/decisions are more consistent with the reference?"
+            "novelty_decision_alignment": {
+                "title": "Novelty Decision Alignment", 
+                "description": "Which assessment reaches a novelty conclusion that is more consistent with the reference review's novelty decision?"
             },
             "claim_substantiation": {
                 "title": "Claim Substantiation",
-                "description": "Which candidate better supports their claims with evidence similar to the reference?"
+                "description": "Which candidate better supports their claims with evidence? Consider which one: (1) Provides specific examples or citations to back up statements, (2) References concrete details from the paper being reviewed, (3) Uses evidence that directly supports their novelty arguments, (4) Avoids unsupported generalizations or assertions"
             },
-            "novelty_assessment": {
-                "title": "Novelty Assessment Quality",
-                "description": "Which candidate's novelty evaluation is more aligned with the reference's assessment?"
-            },
-            "technical_depth": {
-                "title": "Technical Depth",
-                "description": "Which candidate matches the reference's level of technical analysis better?"
-            },
-            "critical_analysis": {
-                "title": "Critical Analysis",
-                "description": "Which candidate provides critical evaluation similar to the reference's approach?"
+            "analytical_quality": {
+                "title": "Analytical Quality",
+                "description": "Which assessment provides a more thorough and insightful technical analysis? Consider which one: (1) Explains technical methods and contributions in more detail, (2) Identifies specific strengths and limitations of the approach, (3) Demonstrates deeper understanding of the technical content, (4) Provides more substantive evaluation beyond surface-level comments"
             }
         };
 
-        // Response options
+        // Updated response options from reference_comparison.py
         this.responseOptions = {
-            "candidate_a_much_better": "Candidate A Much Better",
-            "candidate_a_better": "Candidate A Better",
-            "similar_quality": "Similar Quality", 
-            "candidate_b_better": "Candidate B Better",
-            "candidate_b_much_better": "Candidate B Much Better"
+            "a_wins": "A wins",
+            "b_wins": "B wins", 
+            "tie": "Tie",
+            "unclear": "Unclear"
         };
 
         this.init();
@@ -48,325 +46,491 @@ class StaticEvaluationSystem {
 
     async init() {
         try {
-            await this.loadPapers();
+            await this.loadAuthConfig();
+            await this.loadAssignmentConfig();
             this.updateStats();
         } catch (error) {
             console.error('Failed to initialize:', error);
-            this.showError('Failed to load evaluation data. Please refresh the page.');
+            this.showError('Failed to load evaluation configuration. Please check that the assignment files are available.');
         }
     }
 
-    async loadPapers() {
+    async loadAuthConfig() {
         try {
-            const response = await fetch('data/papers.json');
-            if (!response.ok) {
-                throw new Error('Failed to load papers data');
+            const response = await fetch('data/auth_config.json');
+            if (response.ok) {
+                const authConfig = await response.json();
+                this.validAccessCodes = authConfig.access_codes || [];
+                console.log('Loaded authentication configuration');
+            } else {
+                // Fallback to hardcoded codes
+                this.validAccessCodes = ["NOVELTY2025", "EVAL2025", "ICLR2025"];
+                console.warn('Using fallback access codes');
             }
-            this.papers = await response.json();
-            console.log(`Loaded ${Object.keys(this.papers).length} papers`);
         } catch (error) {
-            console.error('Error loading papers:', error);
+            // Fallback to hardcoded codes
+            this.validAccessCodes = ["NOVELTY2025", "EVAL2025", "ICLR2025"];
+            console.warn('Failed to load auth config, using fallback codes');
+        }
+    }
+
+    authenticate(accessCode) {
+        // Check if access code is valid
+        const isValid = this.validAccessCodes.includes(accessCode.toUpperCase());
+        
+        if (isValid) {
+            this.isAuthenticated = true;
+            // Store authentication in session storage (cleared when browser closes)
+            sessionStorage.setItem('evalauth', btoa(accessCode));
+            return true;
+        }
+        return false;
+    }
+
+    checkExistingAuth() {
+        // Check if user is already authenticated in this session
+        const storedAuth = sessionStorage.getItem('evalauth');
+        if (storedAuth) {
+            try {
+                const accessCode = atob(storedAuth);
+                return this.authenticate(accessCode);
+            } catch (e) {
+                sessionStorage.removeItem('evalauth');
+                return false;
+            }
+        }
+        return false;
+    }
+
+    async loadAssignmentConfig() {
+        try {
+            const response = await fetch('data/static_evaluation_config.json');
+            if (!response.ok) {
+                throw new Error('Failed to load assignment configuration');
+            }
+            this.assignmentConfig = await response.json();
+            console.log('Loaded assignment configuration:', this.assignmentConfig);
+        } catch (error) {
+            console.error('Error loading assignment config:', error);
+            // Continue without config - fallback to single evaluator mode
+            this.assignmentConfig = null;
+        }
+    }
+
+    async loadEvaluatorSamples(evaluatorId) {
+        if (!this.isAuthenticated) {
+            throw new Error('Authentication required');
+        }
+
+        try {
+            let filename;
+            if (this.assignmentConfig && this.assignmentConfig.evaluator_files[evaluatorId]) {
+                filename = `data/${this.assignmentConfig.evaluator_files[evaluatorId]}`;
+            } else {
+                // Fallback naming convention
+                filename = `data/evaluator_${evaluatorId}_samples.json`;
+            }
+
+            const response = await fetch(filename);
+            if (!response.ok) {
+                throw new Error(`Failed to load samples for evaluator ${evaluatorId}`);
+            }
+            
+            this.evaluatorSamples = await response.json();
+            this.evaluatorId = evaluatorId;
+            
+            console.log(`Loaded ${this.evaluatorSamples.length} samples for evaluator ${evaluatorId}`);
+            return true;
+        } catch (error) {
+            console.error('Error loading evaluator samples:', error);
             throw error;
         }
     }
 
     loadCompletedEvaluations() {
-        const saved = localStorage.getItem('completedEvaluations');
+        const saved = localStorage.getItem(`completedEvaluations_${this.evaluatorId || 'default'}`);
         return saved ? JSON.parse(saved) : [];
     }
 
     saveCompletedEvaluation(evaluation) {
         this.completedEvaluations.push(evaluation);
-        localStorage.setItem('completedEvaluations', JSON.stringify(this.completedEvaluations));
+        localStorage.setItem(`completedEvaluations_${this.evaluatorId || 'default'}`, 
+                            JSON.stringify(this.completedEvaluations));
     }
 
     generateEvaluationId() {
-        return 'eval_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        return `eval_${this.evaluatorId}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
 
-    getRandomAssignment(evaluatorId) {
-        if (!this.papers || Object.keys(this.papers).length === 0) {
-            throw new Error('No papers available');
+    getCurrentSample() {
+        if (!this.evaluatorSamples || this.currentSampleIndex >= this.evaluatorSamples.length) {
+            return null;
+        }
+        return this.evaluatorSamples[this.currentSampleIndex];
+    }
+
+    displayCurrentSample() {
+        this.currentSample = this.getCurrentSample();
+        
+        if (!this.currentSample) {
+            this.showError('No more samples available');
+            return;
         }
 
-        const paperIds = Object.keys(this.papers);
-        const paperId = paperIds[Math.floor(Math.random() * paperIds.length)];
-        const paperSources = this.papers[paperId];
+        // Update progress info
+        document.getElementById('current-sample').textContent = this.currentSampleIndex + 1;
+        document.getElementById('total-samples').textContent = this.evaluatorSamples.length;
         
-        // Reference is always a human review
-        if (!paperSources.human || paperSources.human.length === 0) {
-            // Try another paper
-            return this.getRandomAssignment(evaluatorId);
+        // Update assignment type indicator
+        const assignmentType = this.currentSample.assignment_type || 'unknown';
+        const indicator = document.getElementById('assignment-type-indicator');
+        if (assignmentType === 'overlap') {
+            indicator.innerHTML = '<span class="assignment-badge overlap-badge">Overlap Sample</span>';
+        } else if (assignmentType === 'unique') {
+            indicator.innerHTML = '<span class="assignment-badge unique-badge">Unique Sample</span>';
+        } else {
+            indicator.innerHTML = '';
         }
+
+        // Update paper info
+        document.getElementById('paper-id').textContent = this.currentSample.paper_id;
+        document.getElementById('sample-type').textContent = assignmentType;
+        document.getElementById('evaluator-sample-id').textContent = this.currentSample.evaluator_sample_id || this.currentSampleIndex;
+
+        // Show/hide reference badge for overlap samples
+        const refBadge = document.getElementById('reference-badge');
+        if (assignmentType === 'overlap') {
+            refBadge.style.display = 'inline-block';
+        } else {
+            refBadge.style.display = 'none';
+        }
+
+        // Update review content
+        document.getElementById('reference-content').textContent = this.currentSample.reference_text;
+        document.getElementById('candidate-a-content').textContent = this.currentSample.candidate_a_text;
+        document.getElementById('candidate-b-content').textContent = this.currentSample.candidate_b_text;
         
-        const reference = paperSources.human[Math.floor(Math.random() * paperSources.human.length)];
+        // Update candidate labels (hide source to avoid bias)
+        document.getElementById('candidate-a-label').textContent = 'Candidate A';
+        document.getElementById('candidate-b-label').textContent = 'Candidate B';
+
+        // Reset form
+        this.resetEvaluationForm();
         
-        // Get all other candidates (excluding the chosen reference)
-        const allCandidates = [];
-        Object.values(paperSources).forEach(sourceList => {
-            allCandidates.push(...sourceList);
+        // Record start time
+        this.startTime = Date.now();
+
+        // Update UI state
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('next-btn').disabled = true;
+        document.getElementById('results-info').style.display = 'none';
+    }
+
+    resetEvaluationForm() {
+        // Clear all radio button selections
+        const radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(radio => {
+            radio.checked = false;
         });
-        const otherCandidates = allCandidates.filter(c => c.id !== reference.id);
-        
-        if (otherCandidates.length < 2) {
-            // Try another paper
-            return this.getRandomAssignment(evaluatorId);
+
+        // Remove selected styling
+        const responseOptions = document.querySelectorAll('.response-option');
+        responseOptions.forEach(option => {
+            option.classList.remove('selected');
+        });
+    }
+
+    createEvaluationForm() {
+        const container = document.getElementById('categories-container');
+        container.innerHTML = '';
+
+        Object.entries(this.categories).forEach(([categoryId, category]) => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'category-group';
+            categoryDiv.innerHTML = `
+                <div class="category-title">${category.title}</div>
+                <div class="category-description">${category.description}</div>
+                <div class="response-options">
+                    ${Object.entries(this.responseOptions).map(([optionId, optionLabel]) => `
+                        <label class="response-option" onclick="selectOption('${categoryId}', '${optionId}', this)">
+                            <input type="radio" name="${categoryId}" value="${optionId}">
+                            ${optionLabel}
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+            container.appendChild(categoryDiv);
+        });
+    }
+
+    validateEvaluation() {
+        const categories = Object.keys(this.categories);
+        for (const categoryId of categories) {
+            const selected = document.querySelector(`input[name="${categoryId}"]:checked`);
+            if (!selected) {
+                return { valid: false, missing: categoryId };
+            }
         }
-        
-        // Randomly select two candidates to compare
-        const shuffled = [...otherCandidates].sort(() => Math.random() - 0.5);
-        const [candidateA, candidateB] = shuffled.slice(0, 2);
-        
-        // Randomly shuffle A/B assignment to avoid bias
-        const [finalA, finalB] = Math.random() > 0.5 ? [candidateA, candidateB] : [candidateB, candidateA];
+        return { valid: true };
+    }
+
+    collectEvaluationData() {
+        const responses = {};
+        Object.keys(this.categories).forEach(categoryId => {
+            const selected = document.querySelector(`input[name="${categoryId}"]:checked`);
+            responses[categoryId] = selected ? selected.value : null;
+        });
 
         return {
-            paper_id: paperId,
-            reference: reference,
-            candidate_a: finalA,
-            candidate_b: finalB,
             evaluation_id: this.generateEvaluationId(),
-            evaluator_id: evaluatorId,
+            evaluator_id: this.evaluatorId,
+            sample_index: this.currentSampleIndex,
+            paper_id: this.currentSample.paper_id,
+            assignment_type: this.currentSample.assignment_type,
+            evaluator_sample_id: this.currentSample.evaluator_sample_id,
+            reference_text: this.currentSample.reference_text,
+            candidate_a: {
+                label: this.currentSample.candidate_a_label, // Keep original for analysis (may include deepreviewer_partial)
+                text: this.currentSample.candidate_a_text
+            },
+            candidate_b: {
+                label: this.currentSample.candidate_b_label, // Keep original for analysis (may include deepreviewer_partial)
+                text: this.currentSample.candidate_b_text
+            },
+            responses: responses,
+            metadata: this.currentSample.metadata || {},
             timestamp: new Date().toISOString(),
-            categories: this.categories
+            evaluation_time_ms: Date.now() - this.startTime
         };
+    }
+
+    submitEvaluation() {
+        const validation = this.validateEvaluation();
+        if (!validation.valid) {
+            this.showError(`Please complete all evaluations. Missing: ${this.categories[validation.missing].title}`);
+            return;
+        }
+
+        const evaluationData = this.collectEvaluationData();
+        this.saveCompletedEvaluation(evaluationData);
+        
+        // Auto-download individual evaluation to prevent data loss
+        this.downloadSingleEvaluation(evaluationData);
+        
+        // Update UI
+        document.getElementById('submit-btn').disabled = true;
+        document.getElementById('next-btn').disabled = false;
+        document.getElementById('results-info').style.display = 'block';
+        
+        this.updateStats();
+        
+        console.log('Evaluation submitted:', evaluationData);
+    }
+
+    nextSample() {
+        this.currentSampleIndex++;
+        
+        if (this.currentSampleIndex >= this.evaluatorSamples.length) {
+            this.showCompletionMessage();
+            return;
+        }
+        
+        this.displayCurrentSample();
+    }
+
+    showCompletionMessage() {
+        const container = document.getElementById('evaluation-interface');
+        container.innerHTML = `
+            <div class="results-info">
+                <h3>🎉 All Evaluations Completed!</h3>
+                <p>You have completed all ${this.evaluatorSamples.length} assigned samples.</p>
+                <p>Each evaluation has been automatically downloaded as you completed it.</p>
+                <p><strong>Thank you for your participation!</strong></p>
+                <div class="download-section">
+                    <button class="btn btn-success" onclick="downloadResults()">Download Combined Results</button>
+                </div>
+            </div>
+        `;
     }
 
     updateStats() {
-        const statsElement = document.getElementById('stats-content');
-        const availablePapers = this.papers ? Object.keys(this.papers).length : 0;
-        const completedCount = this.completedEvaluations.length;
-        const evaluators = new Set(this.completedEvaluations.map(e => e.evaluator_id)).size;
+        const overlapCount = this.completedEvaluations.filter(e => e.assignment_type === 'overlap').length;
+        const uniqueCount = this.completedEvaluations.filter(e => e.assignment_type === 'unique').length;
         
-        statsElement.innerHTML = `
-            <strong>Statistics:</strong> 
-            ${availablePapers} papers available | 
-            ${completedCount} evaluations completed | 
-            ${evaluators} evaluator(s)
-        `;
+        document.getElementById('completed-count').textContent = this.completedEvaluations.length;
+        document.getElementById('overlap-count').textContent = overlapCount;
+        document.getElementById('unique-count').textContent = uniqueCount;
     }
-}
 
-// Global state
-let evaluationSystem = null;
+    downloadSingleEvaluation(evaluationData) {
+        // Download individual evaluation immediately to prevent data loss
+        const data = {
+            evaluator_id: this.evaluatorId,
+            evaluation: evaluationData,
+            export_timestamp: new Date().toISOString()
+        };
 
-// UI Functions
-function showSection(sectionId) {
-    const sections = ['setup-section', 'loading-section', 'evaluation-interface', 'error-section', 'success-section'];
-    sections.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.style.display = id === sectionId ? 'block' : 'none';
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `eval_${this.evaluatorId}_${evaluationData.evaluator_sample_id}_${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    downloadResults() {
+        const data = {
+            evaluator_id: this.evaluatorId,
+            total_evaluations: this.completedEvaluations.length,
+            export_timestamp: new Date().toISOString(),
+            assignment_info: this.assignmentConfig,
+            evaluations: this.completedEvaluations
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `evaluator_${this.evaluatorId}_results_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    showError(message) {
+        const container = document.getElementById('error-container');
+        container.innerHTML = `<div class="error-message">${message}</div>`;
+        setTimeout(() => {
+            container.innerHTML = '';
+        }, 5000);
+    }
+
+    showEvaluatorInfo(evaluatorId) {
+        const infoDiv = document.getElementById('evaluator-info');
+        const detailsDiv = document.getElementById('assignment-details');
+        
+        if (this.assignmentConfig) {
+            const overlapSamples = this.evaluatorSamples.filter(s => s.assignment_type === 'overlap').length;
+            const uniqueSamples = this.evaluatorSamples.filter(s => s.assignment_type === 'unique').length;
+            
+            detailsDiv.innerHTML = `
+                <div class="assignment-info">
+                    <div><strong>Total Samples:</strong> ${this.evaluatorSamples.length}</div>
+                    <div><strong>Overlap Samples:</strong> ${overlapSamples} (evaluated by all evaluators)</div>
+                    <div><strong>Unique Samples:</strong> ${uniqueSamples} (specific to you)</div>
+                    <div><strong>Assignment Type:</strong> Hybrid evaluation</div>
+                </div>
+            `;
+        } else {
+            detailsDiv.innerHTML = `
+                <div><strong>Samples Loaded:</strong> ${this.evaluatorSamples.length}</div>
+                <div><strong>Assignment Type:</strong> Standard evaluation</div>
+            `;
         }
-    });
-}
-
-function showError(message) {
-    const errorElement = document.getElementById('error-section');
-    if (errorElement) {
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
-        setTimeout(() => {
-            errorElement.style.display = 'none';
-        }, 5000);
+        
+        infoDiv.style.display = 'block';
     }
 }
 
-function showSuccess(message) {
-    const successElement = document.getElementById('success-section');
-    if (successElement) {
-        successElement.textContent = message;
-        successElement.style.display = 'block';
-        setTimeout(() => {
-            successElement.style.display = 'none';
-        }, 5000);
-    }
-}
+// Global instance
+let evaluationSystem;
 
-function startEvaluation() {
-    const evaluatorId = document.getElementById('evaluator-id').value.trim();
-    if (!evaluatorId) {
-        showError('Please enter an evaluator ID');
+// Global functions for HTML onclick handlers
+function authenticateAndLoad() {
+    const accessCodeInput = document.getElementById('access-code');
+    const evaluatorIdInput = document.getElementById('evaluator-id');
+    const accessCode = accessCodeInput.value.trim();
+    const evaluatorId = evaluatorIdInput.value;
+    
+    // Clear previous error
+    document.getElementById('auth-error').style.display = 'none';
+    
+    // Validate inputs
+    if (!accessCode) {
+        showAuthError('Please enter an access code');
         return;
     }
-
-    getAssignment(evaluatorId);
-}
-
-function getAssignment(evaluatorId) {
-    showSection('loading-section');
-
-    try {
-        const assignment = evaluationSystem.getRandomAssignment(evaluatorId);
-        evaluationSystem.currentAssignment = assignment;
-        evaluationSystem.startTime = Date.now();
-        displayAssignment();
-        showSection('evaluation-interface');
-    } catch (error) {
-        showError('Failed to get assignment: ' + error.message);
-        showSection('setup-section');
+    
+    if (evaluatorId === '' || evaluatorId < 0) {
+        showAuthError('Please enter a valid evaluator ID (0, 1, 2, ...)');
+        return;
     }
-}
-
-function displayAssignment() {
-    const assignment = evaluationSystem.currentAssignment;
     
-    document.getElementById('paper-id').textContent = assignment.paper_id;
-    document.getElementById('evaluation-id').textContent = assignment.evaluation_id;
+    // Authenticate
+    if (!evaluationSystem.authenticate(accessCode)) {
+        showAuthError('Invalid access code. Please contact the research team for the correct code.');
+        return;
+    }
     
-    document.getElementById('reference-label').textContent = assignment.reference.label;
-    document.getElementById('reference-content').textContent = assignment.reference.content;
-    
-    document.getElementById('candidate-a-label').textContent = assignment.candidate_a.label;
-    document.getElementById('candidate-a-content').textContent = assignment.candidate_a.content;
-    
-    document.getElementById('candidate-b-label').textContent = assignment.candidate_b.label;
-    document.getElementById('candidate-b-content').textContent = assignment.candidate_b.content;
-
-    displayQuestions();
-}
-
-function displayQuestions() {
-    const container = document.getElementById('questions-container');
-    container.innerHTML = '';
-
-    Object.entries(evaluationSystem.categories).forEach(([categoryId, category]) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'question-group';
-        
-        questionDiv.innerHTML = `
-            <div class="question-title">${category.title}</div>
-            <div class="question-description">${category.description}</div>
-            <div class="radio-group" data-category="${categoryId}">
-                ${Object.entries(evaluationSystem.responseOptions).map(([value, label]) => `
-                    <label class="radio-option">
-                        <input type="radio" name="${categoryId}" value="${value}">
-                        <span>${label}</span>
-                    </label>
-                `).join('')}
-            </div>
-        `;
-        
-        container.appendChild(questionDiv);
-    });
-
-    // Add click handlers for radio options
-    document.querySelectorAll('.radio-option').forEach(option => {
-        option.addEventListener('click', function() {
-            const radio = this.querySelector('input[type="radio"]');
-            radio.checked = true;
+    // Load samples
+    evaluationSystem.loadEvaluatorSamples(evaluatorId)
+        .then(() => {
+            // Hide auth gate, show evaluation interface
+            document.getElementById('auth-gate').style.display = 'none';
+            document.getElementById('evaluation-interface').style.display = 'block';
             
-            // Update visual selection
-            const group = this.parentElement;
-            group.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
-            this.classList.add('selected');
+            // Show evaluator info
+            evaluationSystem.showEvaluatorInfo(evaluatorId);
+            
+            // Create evaluation form
+            evaluationSystem.createEvaluationForm();
+            
+            // Display first sample
+            evaluationSystem.displayCurrentSample();
+        })
+        .catch(error => {
+            showAuthError(`Failed to load samples for evaluator ${evaluatorId}. Please check your ID and try again.`);
         });
-    });
 }
 
-function collectResponses() {
-    const responses = {};
-    Object.keys(evaluationSystem.categories).forEach(categoryId => {
-        const selected = document.querySelector(`input[name="${categoryId}"]:checked`);
-        if (selected) {
-            responses[categoryId] = selected.value;
-        }
-    });
-    return responses;
+function showAuthError(message) {
+    const errorDiv = document.getElementById('auth-error');
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
 }
 
-function validateResponses(responses) {
-    const requiredCategories = Object.keys(evaluationSystem.categories);
-    const answeredCategories = Object.keys(responses);
+function loadEvaluatorSamples() {
+    // Legacy function - redirect to authentication
+    authenticateAndLoad();
+}
+
+function selectOption(categoryId, optionId, element) {
+    // Remove selected class from all options in this category
+    const categoryContainer = element.closest('.category-group');
+    const allOptions = categoryContainer.querySelectorAll('.response-option');
+    allOptions.forEach(opt => opt.classList.remove('selected'));
     
-    const missing = requiredCategories.filter(cat => !answeredCategories.includes(cat));
-    return missing;
+    // Add selected class to clicked option
+    element.classList.add('selected');
+    
+    // Check the radio button
+    const radio = element.querySelector('input[type="radio"]');
+    radio.checked = true;
 }
 
 function submitEvaluation() {
-    const responses = collectResponses();
-    const missing = validateResponses(responses);
-    
-    if (missing.length > 0) {
-        showError(`Please answer all questions. Missing: ${missing.join(', ')}`);
-        return;
-    }
-
-    const duration = evaluationSystem.startTime ? Math.floor((Date.now() - evaluationSystem.startTime) / 1000) : 0;
-    const additionalComments = document.getElementById('additional-comments').value;
-
-    document.getElementById('submit-btn').disabled = true;
-    document.getElementById('submit-btn').textContent = 'Submitting...';
-
-    try {
-        // Build evaluation data
-        const evaluationData = {
-            paper_id: evaluationSystem.currentAssignment.paper_id,
-            evaluation_id: evaluationSystem.currentAssignment.evaluation_id,
-            evaluator_id: evaluationSystem.currentAssignment.evaluator_id,
-            assignment_timestamp: evaluationSystem.currentAssignment.timestamp,
-            submission_timestamp: new Date().toISOString(),
-            reference: evaluationSystem.currentAssignment.reference,
-            candidate_a: evaluationSystem.currentAssignment.candidate_a,
-            candidate_b: evaluationSystem.currentAssignment.candidate_b,
-            responses: responses,
-            duration_seconds: duration,
-            additional_comments: additionalComments
-        };
-
-        // Save to localStorage and provide download
-        evaluationSystem.saveCompletedEvaluation(evaluationData);
-        downloadEvaluation(evaluationData);
-        
-        showSuccess('Evaluation submitted successfully! Data has been saved locally and downloaded. You can get a new assignment or enter a new evaluator ID.');
-        evaluationSystem.updateStats();
-        
-        document.getElementById('submit-btn').disabled = false;
-        document.getElementById('submit-btn').textContent = 'Submit Evaluation';
-        
-    } catch (error) {
-        showError('Failed to submit evaluation: ' + error.message);
-        document.getElementById('submit-btn').disabled = false;
-        document.getElementById('submit-btn').textContent = 'Submit Evaluation';
-    }
+    evaluationSystem.submitEvaluation();
 }
 
-function downloadEvaluation(evaluationData) {
-    const dataStr = JSON.stringify(evaluationData, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
-    
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(dataBlob);
-    link.download = `evaluation_${evaluationData.evaluation_id}.json`;
-    link.click();
+function nextSample() {
+    evaluationSystem.nextSample();
 }
 
-function getNewAssignment() {
-    const evaluatorId = document.getElementById('evaluator-id').value.trim();
-    if (!evaluatorId) {
-        showError('Please enter an evaluator ID');
-        showSection('setup-section');
-        return;
-    }
-    getAssignment(evaluatorId);
+function downloadResults() {
+    evaluationSystem.downloadResults();
 }
 
 // Initialize the system when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    evaluationSystem = new StaticEvaluationSystem();
+    evaluationSystem = new HybridEvaluationSystem();
     
-    // Enable Enter key for evaluator ID input
-    const evaluatorInput = document.getElementById('evaluator-id');
-    if (evaluatorInput) {
-        evaluatorInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                startEvaluation();
-            }
-        });
+    // Check if user is already authenticated
+    if (evaluationSystem.checkExistingAuth()) {
+        console.log('User already authenticated in this session');
+        // Could auto-show interface or keep auth gate for evaluator ID selection
     }
 });
-
-// Export functions for global access
-window.startEvaluation = startEvaluation;
-window.getNewAssignment = getNewAssignment;
-window.submitEvaluation = submitEvaluation;

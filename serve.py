@@ -1,40 +1,40 @@
 #!/usr/bin/env python3
 """
-Simple HTTP server for local testing of the static evaluation system
+Simple HTTP server for local testing of the static evaluation system.
 """
 
 import http.server
 import socketserver
-import webbrowser
 import os
+import sys
 from pathlib import Path
 
-PORT = 8000
 
-class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def end_headers(self):
-        # Add CORS headers for local development
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        super().end_headers()
+def main():
+    # Change to the directory containing this script
+    script_dir = Path(__file__).parent
+    os.chdir(script_dir)
 
-def serve():
-    """Start local development server"""
-    os.chdir(Path(__file__).parent)
-    
+    PORT = 5044
+
+    class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+        def end_headers(self):
+            # Add CORS headers for local development
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            super().end_headers()
+
     with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
-        print(f"Static Evaluation System")
-        print(f"Serving at http://localhost:{PORT}")
-        print(f"Press Ctrl+C to stop")
-        
-        # Try to open browser automatically
+        print(f"Serving static evaluation system at http://localhost:{PORT}")
+        print(f"Directory: {script_dir}")
+        print("Press Ctrl+C to stop the server")
+
         try:
-            webbrowser.open(f'http://localhost:{PORT}')
-        except:
-            pass
-        
-        httpd.serve_forever()
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\nServer stopped.")
+
 
 if __name__ == "__main__":
-    serve()
+    main()

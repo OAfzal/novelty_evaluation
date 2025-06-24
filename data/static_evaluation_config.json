@@ -1,0 +1,17 @@
+{
+  "evaluation_type": "hybrid_assignment",
+  "num_evaluators": 3,
+  "total_samples": 100,
+  "overlap_size": 25,
+  "evaluator_files": {
+    "0": "evaluator_0_samples.json",
+    "1": "evaluator_1_samples.json",
+    "2": "evaluator_2_samples.json"
+  },
+  "instructions": {
+    "overlap_samples": "These samples (marked as overlap) will be evaluated by all evaluators for reliability measurement",
+    "unique_samples": "These samples (marked as unique) are specific to your evaluator ID",
+    "assignment_type_field": "assignment_type",
+    "evaluator_sample_id_field": "evaluator_sample_id"
+  }
+}

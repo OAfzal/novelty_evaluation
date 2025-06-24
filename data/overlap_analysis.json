@@ -1,0 +1,965 @@
+{
+  "overlap_size": 25,
+  "evaluators": [
+    0,
+    1,
+    2
+  ],
+  "overlap_sample_ids": [
+    37,
+    48,
+    60,
+    85,
+    97,
+    84,
+    54,
+    4,
+    45,
+    95,
+    8,
+    5,
+    30,
+    43,
+    75,
+    52,
+    20,
+    67,
+    70,
+    28,
+    77,
+    93,
+    31,
+    87,
+    71
+  ],
+  "overlap_paper_ids": [
+    "rWIrdAo2xC",
+    "7X65yoKl3Y",
+    "Mvn5g49RrM",
+    "aueXfY0Clv",
+    "obYDlJN0oU",
+    "YCdag94iZs",
+    "6akuzEqP38",
+    "yYQLvofQ1k",
+    "Gh1XW314zF",
+    "lBrLDC7qXF",
+    "a8mKwRQQrP",
+    "cRR0oDFEBC",
+    "QFaj7InstQ",
+    "c4w1TqcSi0",
+    "2ofVtMvRil",
+    "W48CPXEpXR",
+    "dTGH9vUVdf",
+    "gRmWtOnTLK",
+    "7hM5597bCv",
+    "N2sN3LESoW",
+    "QipLSeLQRS",
+    "AAjCYWXC5I",
+    "xYzOkOGD96",
+    "waIltEWDr8",
+    "KwPUQOQIKt"
+  ],
+  "samples": [
+    {
+      "id": 37,
+      "paper_id": "rWIrdAo2xC",
+      "reference_text": "This paper proposes to train a conditional diffusion model for generating novel views of humans from given single-view images, directly supervised by proxy ground truth 3D Gaussian attributes. The method outperforms other generalizable novel view synthesis techniques like LGM, and the idea of using a neural network to constrain the distribution of target 3D Gaussian attributes makes sense and is effective. However, although the method demonstrates improvement compared to previous methods like LGM, the image quality remains limited since only one single input image is used, and another potential direction in this field is incorporating a 2D diffusion prior to enhance information, as demonstrated in Human 3Diffusion. A comparison to these baselines is needed.",
+      "candidate_a_text": "This submission introduces a novel direct attribute-level supervision paradigm for 3D Gaussian Splatting (3DGS) in generalizable monocular 3D human rendering, diverging from the prevalent pixel-level (indirect) supervision used in prior works. The approach leverages a two-stage proxy attribute construction and a conditional diffusion model to directly supervise 3DGS attributes, which is a substantive technical difference from existing methods like GPS-Gaussian, Zou et al., LGM, and FreeSplat. While the use of diffusion models for 3D attribute generation is not new, its application to 3DGS attributes in this context is novel, though the underlying methodology follows established trends in the field. The authors’ claims of inefficiency and suboptimality in prior pixel-level supervision are sometimes overstated and not always empirically substantiated, and some relevant recent works are not cited or compared. Overall, the main contribution is the new supervision strategy for 3DGS, but the practical impact should be carefully evaluated with empirical results and broader comparisons to recent literature.",
+      "candidate_b_text": "This paper proposes a novel method for generating novel views of humans from single-view images by leveraging 3D Gaussian Splatting. The authors propose a two-stage process to create consistent and smoothly distributed proxy ground-truth 3D Gaussian attributes, which is a novel approach to address the challenges of precise error backpropagation and local optima convergence in existing methods. The method, named HUMAN-DAD, demonstrates significant performance improvements over state-of-the-art methods through extensive experiments.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 1,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {
+          "consensus_review": 1,
+          "consensus_score": 0.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            4
+          ],
+          "agreement_matrix": {
+            "1": {
+              "1": true,
+              "4": false
+            },
+            "4": {
+              "1": false,
+              "4": true
+            }
+          },
+          "agreement_scores": {
+            "1": 0.0,
+            "4": 0.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 21
+    },
+    {
+      "id": 48,
+      "paper_id": "7X65yoKl3Y",
+      "reference_text": "This paper introduces ALLoRA, a novel low-rank adaptation algorithm designed to address issues in existing LoRA approaches, specifically targeting dropout, poor optimization landscapes, and the need for scaling factors. By scaling per-sample and per-parameter gradients with a coefficient inversely proportional to the parameters' $l_2$ norm, ALLoRA aims to eliminate the need for dropout and scaling hyperparameters, and incorporates an adaptive learning rate. While the proposed method is technically precise and offers practical simplifications, the novelty of the contribution is quite marginal. Although ALLoRA represents a new variant of LoRA, the work lacks in-depth theoretical analysis to substantiate its improvements over existing methods. The paper would benefit from a more comprehensive technical discussion clarifying how ALLoRA advances beyond vanilla LoRA and related approaches, as the current presentation does not convincingly establish a significant leap in novelty.",
+      "candidate_a_text": "This paper proposes ALLoRA, a variant of the popular LoRA technique for fine-tuning pre-trained language models. The contribution lies in modifying LoRA by removing dropout, individually scaling the learning rate of the LoRA parameters, and eliminating the first warmup step, with the aim of addressing limitations in LoRA's existing design choices. While the paper presents simple yet effective modifications that are well-motivated and supported by experimental results, the novelty of ALLoRA is primarily in these incremental implementation changes to the established LoRA approach. The review does not explicitly compare ALLoRA to closely related prior work beyond the original LoRA method, nor does it assess the distinctiveness of these modifications in the context of broader literature. Overall, the perceived contribution is incremental, with the main advance being practical adjustments rather than a fundamentally new technique. The review suggests that the impact of the learning rate scaling on the optimization process is not fully justified or analyzed, which limits the clarity regarding the significance of the contribution.",
+      "candidate_b_text": "ALLoRA is presented as a practical extension of LoRA for parameter-efficient fine-tuning of LLMs, combining Dropout/scaling removal and per-parameter adaptive learning rates to address known LoRA limitations. While the method’s main novelty lies in this specific combination, each component—adaptive learning rates, hyperparameter simplification, and improved initialization—has clear precedent in prior work (notably LoRA+, DoRA, and AdaLomo, the latter not cited). The submission accurately situates ALLoRA within the LoRA variant landscape but omits direct engagement with some highly relevant recent methods, which weakens its novelty claims. Empirical improvements are reported, but without ablation or direct comparison to all relevant baselines, it is unclear if gains stem from the proposed method or implementation choices. Overall, ALLoRA represents an incremental advance through integration of existing ideas, and reviewers should weigh whether this synthesis constitutes a substantive contribution in the context of a mature and rapidly evolving field.",
+      "candidate_a_label": "AI System: deepreviewer_partial",
+      "candidate_b_label": "AI System: ours",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "deepreviewer_partial",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "ours",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 5
+    },
+    {
+      "id": 60,
+      "paper_id": "Mvn5g49RrM",
+      "reference_text": "This paper introduces RedCodeAgent, an LLM-based red-teaming agent designed to dynamically optimize prompts in order to attack code agents by inducing risky code execution, such as deleting critical files. The system is composed of a memory module that stores successful red-teaming experiences and a toolbox that provides various jailbreaking algorithms, with an LLM-based code substitution tool used to obfuscate code while maintaining its functionality. However, the novelty of RedCodeAgent appears to be limited, as its overall design and methodology are quite standard and largely build upon existing techniques. The agent primarily utilizes established jailbreaking algorithms to bypass code agent defenses, and the memory-plus-tool architecture is a common approach in constructing LLM-based agents. The process of iteratively attempting attacks and obfuscating code until success or abandonment does not introduce fundamentally new concepts or techniques. In essence, RedCodeAgent can be viewed as a combination of existing baseline methods and a code substitution tool, automated through an LLM with multiple attempts. As such, the approach lacks deep conceptual innovation or novel methodologies that advance the state of the art, and its contribution is primarily in integrating and automating existing components rather than introducing significant new insights or frameworks.",
+      "candidate_a_text": "RedCodeAgent is an automated, adaptive red-teaming agent targeting LLM-based code agents, distinguished by its use of a memory module and real-time, multi-round prompt adaptation for attacking agents with code execution capabilities. While the authors claim to be the first to fully automate adaptive red-teaming for code agents, similar approaches (e.g., RedAgent, RedCode, ASB) are emerging in parallel, and the distinction between code LLMs and code agents is sometimes overstated. The main substantive advance is the integration of adaptivity and memory for red-teaming code agents, but the underlying techniques (memory modules, prompt optimization) are established in the literature, making the contribution incremental rather than groundbreaking. The evaluation is based on a custom, relatively small scenario set, rather than the largest available benchmarks, which limits the strength of empirical claims. Overall, RedCodeAgent is a timely and meaningful step forward, but reviewers should be cautious about strong novelty claims and look for clear evidence of substantive advances beyond routine adaptations of existing methods.",
+      "candidate_b_text": "This paper proposes RedCodeAgent, an automated red-teaming agent designed to evaluate the safety of LLM-based code agents, equipped with tools for function-calling and a memory module for accumulating successful attack experiences. The novelty of the proposed method is limited. The proposed RedCodeAgent is an agent-based tool that calls other tools to jailbreak the target code agent, and similar agent-based methods have been proposed in many other fields, such as [1] in the vulnerability detection domain. The authors should clarify the key differences between these works.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 40
+    },
+    {
+      "id": 85,
+      "paper_id": "aueXfY0Clv",
+      "reference_text": "The proposed Depth Pro model employs a ViT architecture for zero-shot metric monocular depth estimation, targeting applications such as novel view synthesis. While Depth Pro benefits from pretrained ViT backbones, its architecture primarily builds on existing elements rather than introducing fundamentally new mechanisms for depth estimation, which limits its architectural novelty. The paper introduces a two-stage training approach that integrates synthetic and real-world datasets, enhancing depth boundary accuracy, and includes new metrics for evaluating depth boundaries that address a gap in existing benchmarks by focusing on boundary precision, which is critical for applications like view synthesis that demand fine details.",
+      "candidate_a_text": "This paper proposes a new method for zero-shot monocular depth estimation that is efficient, fast and accurate, and is also capable of predicting metric-scale depth, which is a challenging task. The experiments demonstrate the superiority of the proposed method over the existing methods.",
+      "candidate_b_text": "Depth Pro is presented as a foundation model for zero-shot, high-resolution, metric monocular depth estimation without requiring camera intrinsics, emphasizing sharp boundaries and fast inference. While the submission claims several firsts—including zero-shot focal length estimation and new boundary evaluation metrics using matting datasets—many of these contributions are incremental extensions or empirical integrations of strategies already present in recent works such as UniDepth, DMD, Metric3D v2, PatchFusion, PatchRefiner, and SM4Depth. The main substantive advance appears to be the combination of speed, sharpness, and metric accuracy in a single model, with the use of matting datasets for boundary evaluation being a modest but useful addition. However, the claim of being the \"first foundation model\" for this problem is overstated, as several recent models address similar challenges, sometimes with different technical means. Reviewers should recognize Depth Pro as a strong empirical advance within a rapidly evolving field, but should calibrate novelty claims in light of the incremental nature of most contributions and the omission of some highly relevant prior work.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: ours",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 2,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "ours",
+        "consensus_info": {
+          "consensus_review": 2,
+          "consensus_score": 1.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            3
+          ],
+          "agreement_matrix": {
+            "2": {
+              "2": true,
+              "3": true
+            },
+            "3": {
+              "2": true,
+              "3": true
+            }
+          },
+          "agreement_scores": {
+            "2": 1.0,
+            "3": 1.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 45
+    },
+    {
+      "id": 97,
+      "paper_id": "obYDlJN0oU",
+      "reference_text": "This paper introduces Massively Multi-Agents Role Playing (MMARP), a framework that leverages the collective responses of numerous simulated language model agents, each assigned distinct roles such as buyer or seller, to improve stock price prediction by modeling market dynamics through aggregated agent behavior. While the application of large language models (LLMs) in a market simulation context is creative, the approach demonstrates limited novelty. Similar methods have already employed LLMs in agent-based financial simulations with more sophisticated trading mechanisms, as seen in Gao et al. (2024). In contrast, the MMARP framework primarily restricts LLM agents to providing binary responses (e.g., labeling prices as cheap or expensive), which contributes minimal additional depth or innovation to the simulation of financial markets. As such, the main contribution appears incremental, and the paper does not substantially advance the state of the art in agent-based financial modeling with LLMs.",
+      "candidate_a_text": "The paper proposes a Massively Multi-Agents Role Playing (MMARP) framework to simulate market dynamics using LLMs, leveraging theory-driven prompt designs and LLM-generated weights to address challenges in simulating market behavior. The paper proposes a new method to simulate market dynamics using LLMs, which is a unique approach in the field of financial modeling. However, the paper lacks a thorough comparison with existing financial market simulation models, providing only limited mention of traditional deep-learning models and LLM-based methods without a detailed analysis of how MMARP outperforms or differs from these models in terms of accuracy, computational efficiency, or applicability to real-world scenarios.",
+      "candidate_b_text": "This assessment finds that the submission (MMARP) is an incremental but meaningful advance within the rapidly evolving field of LLM-based multi-agent financial market simulation. Its main technical novelty is a quantitative intersection method for price discovery using theory-driven prompts and aggregate LLM agent responses, which is more systematic than prior aggregation approaches but not a conceptual leap. The work distinguishes itself by providing more rigorous, quantitative evaluation of simulation accuracy (forecasting and profitability) compared to earlier, often more qualitative, agent-based LLM studies. However, the authors tend to overstate their novelty—especially claims of being the “first” to rigorously investigate LLM agent validity—while understating the quantitative elements present in related works. Overall, MMARP’s primary contribution is in methodological refinement and evaluation rigor, rather than in introducing a fundamentally new simulation paradigm.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: ours",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "ours",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 22
+    },
+    {
+      "id": 84,
+      "paper_id": "YCdag94iZs",
+      "reference_text": "This paper introduces a technique called MILCA, designed to perform counting and summing of features, where feature weights are predicted using a fully connected network (FCN) with a projection replacing the softmax layer to produce coefficients within a specified range. In my view, this paper lacks sufficient novelty. The counting-based approach appears to be a straightforward extension within the MIL space, and it does not introduce any new theoretical contributions either.",
+      "candidate_a_text": "The authors propose a simple method for multiple instance learning (MIL) that involves feature selection and either a counting or a weighted sum of the selected features. The proposed method is very simple and can be considered a basic baseline for MIL; while it is interesting that it is competitive with state of the art methods, it is not surprising given that MIL datasets are small and the models are prone to overfitting. I don't think this simple method brings any new insights to the MIL community. The experiments show that it is competitive with state of the art methods.",
+      "candidate_b_text": "MILCA is a simple, efficient Multiple Instance Learning (MIL) method that extends counting/summing approaches by introducing learned feature weights and a projection step, aiming to improve interpretability and efficiency over attention-based models. The submission positions itself as an alternative to attention-based and graph-based MIL, but the technical novelty is incremental, mainly involving a different normalization (projection vs. softmax) and learned weighting, both of which have been explored in related motif-based and aggregation methods. Empirical results show modest accuracy improvements (about 3%) and efficiency gains, particularly in high-dimensional, low-sample regimes, though these may be context-dependent and not unique to MILCA. The authors somewhat overstate the conceptual distinction between \"counting\" and \"attention,\" as both are forms of weighted aggregation, and the practical impact of their technical variations may be limited. Overall, MILCA offers a practical, interpretable, and efficient extension of existing counting-based MIL methods, with its main contribution being empirical performance rather than a fundamentally new paradigm.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: ours",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 1,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "ours",
+        "consensus_info": {
+          "consensus_review": 1,
+          "consensus_score": 1.0,
+          "num_reviews": 4,
+          "consensus_type": "majority",
+          "other_reviews": [
+            0,
+            2,
+            3
+          ],
+          "agreement_matrix": {
+            "0": {
+              "0": true,
+              "1": true,
+              "2": false,
+              "3": true
+            },
+            "1": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "2": {
+              "0": false,
+              "1": true,
+              "2": true,
+              "3": false
+            },
+            "3": {
+              "0": true,
+              "1": true,
+              "2": false,
+              "3": true
+            }
+          },
+          "agreement_scores": {
+            "0": 0.6666666666666666,
+            "1": 1.0,
+            "2": 0.3333333333333333,
+            "3": 0.6666666666666666
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 9
+    },
+    {
+      "id": 54,
+      "paper_id": "6akuzEqP38",
+      "reference_text": "This paper proposes a novel pipeline that enables the creation of articulated objects from arbitrary input mesh, addressing a critical research gap in 3D generation for articulated objects and contributing to an increasingly important area. The main contribution is this pipeline that enables the generation of diverse articulated objects by taking arbitrary 3D mesh as input.",
+      "candidate_a_text": "The submission \"ARTICULATE ANYTHING\" presents a novel pipeline that integrates open-vocabulary segmentation, LLM-based articulation estimation, and diffusion-based generative refinement to convert any rigid 3D mesh into an articulated object, distinguishing itself from prior works that address only subsets of this problem or are limited to closed-set categories. The main technical advances include the use of GPT-4o for direct joint parameter estimation from geometry and language, and a diffusion-based optimization strategy with random part transformations to preserve part semantics. While the integration of these components into a single, open-vocabulary, category-agnostic pipeline is a substantive contribution, the individual elements (segmentation, LLM reasoning, diffusion generation) are incremental extensions of existing methods, and some claims regarding the limitations of prior work are somewhat overstated. The authors' characterization of their novelty is generally accurate for the full pipeline, but less so for individual components, and the omission of some recent related works (e.g., OpenObj, Kinematic-aware Prompting) leaves the comparison incomplete. Overall, the work represents a significant step forward in open-vocabulary articulated object modeling, though its impact is primarily in the integration and scaling of recent advances rather than in fundamental algorithmic breakthroughs.",
+      "candidate_b_text": "This paper introduces an interesting method called \"Articulated Anything\" to address the problem of articulated object generation. While the method is reasonable, it essentially relies on the power of various large models and diffusion models, which may limit the novelty of the proposed framework. The performance of the proposed method is not particularly impressive, and it is difficult to observe a significant improvement compared to existing methods, such as CAGE.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "Human Review 2",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "human",
+        "candidate_b_system_or_id": 2,
+        "consensus_info": {
+          "consensus_review": 0,
+          "consensus_score": 0.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            2
+          ],
+          "agreement_matrix": {
+            "0": {
+              "0": true,
+              "2": false
+            },
+            "2": {
+              "0": false,
+              "2": true
+            }
+          },
+          "agreement_scores": {
+            "0": 0.0,
+            "2": 0.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 7
+    },
+    {
+      "id": 4,
+      "paper_id": "yYQLvofQ1k",
+      "reference_text": "The paper introduces VIRSCI, a multi-agent, LLM-based system designed to simulate teamwork-driven scientific research, organizing agents to mimic collaborative processes such as selecting collaborators, generating research ideas, assessing novelty, and drafting abstracts. The multi-agent approach proposed in this paper has the potential to greatly enhance the quality and breadth of scientific research, with discussion-oriented idea generation that closely mirrors real scientific processes. The 5-step approach—comprising Collaborator Selection, Topic Selection, Idea Generation, Idea Novelty Assessment, and Abstract Generation—presents a promising and robust framework for idea generation. VIRSCI, as a multi-agent system for scientific collaboration, shows clear advantages over single-agent methods. While VIRSCI may generate highly unique or novel ideas, these are less valuable if experimental designs cannot support them within practical constraints.",
+      "candidate_a_text": "The paper presents a novel approach to scientific idea generation using a multi-agent system, addressing the collaborative nature of scientific research. VIRSCI consists of a team of agents that collaborate to generate, evaluate, and refine research ideas, and is evaluated using real-world data with improved performance over single-agent systems. The findings suggest that multi-agent collaboration can enhance the novelty and impact of generated scientific ideas. The use of real-world data and the comparison with single-agent systems demonstrate the practical relevance and effectiveness of the proposed approach.",
+      "candidate_b_text": "This paper proposes a new multi-agent system VIRSCI, designed to mimic the teamwork inherent in scientific research, and constructs the entire pipeline from team organization to final idea formation. This paper is the first to apply the LLM-based multi-agent system to the problem of scientific discovery, realizing the generation of research ideas in autonomous scientific discovery. The contributions are mainly in pioneering the use of multi-agent technology in a completely new field and demonstrating that integrating collaborative agents can lead to more innovative scientific outputs. The simulation results are consistent with key findings in Science of Science, such as that new teams tend to produce more innovative research, demonstrating VIRSCI's potential as a powerful tool for future research in this field. This is the first attempt to apply the LLM-based multi-agent system to the field of scientific exploration, which allows us to see greater possibilities of AI for science and shows that in the future, multi-agent technology may really be able to make new and valuable scientific discoveries.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "Human Review 3",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 2,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "human",
+        "candidate_b_system_or_id": 3,
+        "consensus_info": {
+          "consensus_review": 2,
+          "consensus_score": 0.6666666666666666,
+          "num_reviews": 4,
+          "consensus_type": "majority",
+          "other_reviews": [
+            0,
+            1,
+            3
+          ],
+          "agreement_matrix": {
+            "0": {
+              "0": true,
+              "1": false,
+              "2": false,
+              "3": false
+            },
+            "1": {
+              "0": false,
+              "1": true,
+              "2": true,
+              "3": false
+            },
+            "2": {
+              "0": false,
+              "1": true,
+              "2": true,
+              "3": true
+            },
+            "3": {
+              "0": false,
+              "1": false,
+              "2": true,
+              "3": true
+            }
+          },
+          "agreement_scores": {
+            "0": 0.0,
+            "1": 0.3333333333333333,
+            "2": 0.6666666666666666,
+            "3": 0.3333333333333333
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 47
+    },
+    {
+      "id": 45,
+      "paper_id": "Gh1XW314zF",
+      "reference_text": "This paper introduces MG-LLM, a framework that integrates large language models (LLMs) with graph neural networks (GNNs) to perform multimodal healthcare predictions by constructing modality-specific graphs, propagating information with GNNs, aligning modalities via contrastive learning, and injecting context vectors into the LLM. While the approach is well-motivated and demonstrates improved performance over baseline models, the novelty of the framework requires clarification. The unification of multimodal graphs using contrastive learning has been widely explored in the literature, and the use of multiple types of graphs and multimodal data for healthcare prediction has been addressed in prior work such as GraphCare (ICLR 2024) and reviewed in the broader context by npj Digital Medicine (2022). However, the specific application of multimodal graphs to enhance LLMs’ understanding of multimodal healthcare information appears to be a novel aspect of this work. Additionally, the Patient Similarity Integration and Context Injection components bear resemblance to the retrieve and refine modules proposed in NeurIPS 2022, suggesting that some elements of the framework build upon existing ideas. Overall, while the integration of multimodal graphs with LLMs is a promising direction and may offer incremental novelty, the paper would benefit from a more explicit discussion of how its contributions differ from and advance beyond established methods, particularly in relation to prior work on multimodal graph learning and retrieval-augmented LLMs.",
+      "candidate_a_text": "The submission, MG-LLM, proposes a unified framework that combines graph neural networks (GNNs) for explicit patient similarity and temporal modeling with large language models (LLMs) for multimodal clinical prediction, targeting the integration of heterogeneous EHR data. While prior works have either injected multimodal data into LLMs (e.g., HeLM, LLMMs) or used GNNs for patient graphs (e.g., MGNN), MG-LLM is among the first to explicitly inject GNN-derived patient context into LLMs for healthcare, though similar GNN-LLM integrations exist in other domains. The authors’ claims about novelty are somewhat overstated, as the technical advance is an incremental synthesis of established techniques rather than a foundational breakthrough, and some prior works (e.g., attention-based or NAS-based fusion) can capture complex relationships, albeit less explicitly. Empirical improvements are demonstrated, but it is unclear whether gains stem from conceptual innovation or increased model complexity and better data alignment. Overall, MG-LLM represents a logical and valuable extension of current trends in multimodal healthcare AI, with its main contribution being the explicit, unified integration of GNN-modeled patient relationships into LLM-based reasoning.",
+      "candidate_b_text": "This paper introduces an innovative integration of multimodal data within a graph-based framework, addressing a significant gap in how LLMs handle diverse healthcare data types. The framework's ability to use both temporal and similarity edges in the graph structure is a notable advancement, allowing MG-LLM to capture longitudinal patient data and draw insights from similar patients, which is crucial in healthcare.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 19
+    },
+    {
+      "id": 95,
+      "paper_id": "lBrLDC7qXF",
+      "reference_text": "This paper introduces the CAB-KGC (Context-Aware BERT for Knowledge Graph Completion) model, which presents a novel approach by leveraging the contextual information of neighboring entities and relationships without relying on entity descriptions or negative triplet sampling, a common limitation in previous KGE and LLM-based methods. This removes the dependency on external textual information, making it applicable to a wider variety of KGs, especially those that lack entity descriptions, and leads to more efficient training and improved evaluation performance. However, the innovation in this work seems incremental, as it mainly builds on the SimKGC framework, with the only major difference in the CAB-KGC model being that it does not require head entity descriptions and employs a classification loss (cross-entropy) instead of contrastive loss for training. The introduction of the EDAS criterion also has the potential to influence future performance evaluation practices in the knowledge graph domain.",
+      "candidate_a_text": "CAB-KGC is an incremental extension of recent PLM-based knowledge graph completion (KGC) models, primarily distinguished by its elimination of negative sampling and strict avoidance of entity descriptions, relying solely on structural context for tail prediction. While the authors claim novelty in context integration, several recent models (e.g., CSProm-KG, StAR, NNKGC) also incorporate KG structure/context, making CAB-KGC’s main difference one of implementation detail rather than conceptual advance. The introduction of the EDAS evaluation metric is a useful addition, but similar motivations for improved evaluation have been addressed in other recent work. The paper reports state-of-the-art results, but the attribution of improvements to specific innovations is not fully disentangled, and the field is characterized by frequent, incremental advances. Overall, CAB-KGC is a well-executed synthesis of current trends, but its novelty is moderate, and the paper would benefit from a more thorough and balanced comparison to recent structure-aware and prompt-based KGC models.",
+      "candidate_b_text": "This paper proposes a novel KGE model, namely Context-Aware BERT for Knowledge Graph Completion (CAB-KGC), which utilizes contextual information from linked entities and relations within the graph to predict tail entities and eliminates the need for entity descriptions and negative triplet sampling. However, the novelty is limited, as the proposed method is quite similar to the well-known entity2vec, which also uses the surrounding entities and relationships of the head entity as contextual information to represent the entity; the primary difference is the use of BERT to encode the context rather than an encoder as in entity2vec. It is therefore necessary to explain the novelty of the proposed method. Additionally, the proposed EDAS criterion is a direct application of the EDAS method to KGE, and thus the contribution is limited.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 1,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {
+          "consensus_review": 1,
+          "consensus_score": 1.0,
+          "num_reviews": 3,
+          "consensus_type": "majority",
+          "other_reviews": [
+            3,
+            4
+          ],
+          "agreement_matrix": {
+            "1": {
+              "1": true,
+              "3": true,
+              "4": true
+            },
+            "3": {
+              "1": true,
+              "3": true,
+              "4": true
+            },
+            "4": {
+              "1": true,
+              "3": true,
+              "4": true
+            }
+          },
+          "agreement_scores": {
+            "1": 1.0,
+            "3": 1.0,
+            "4": 1.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 10
+    },
+    {
+      "id": 8,
+      "paper_id": "a8mKwRQQrP",
+      "reference_text": "The paper introduces the GAPSI algorithm, which combines online learning techniques with inventory control theory to address complex inventory management problems. The introduction of the GAPSI algorithm represents a significant advancement in applying online learning techniques to realistic inventory management problems. This work notably contributes to practical aspects, especially in dealing with multiple products, perishability, and warehouse capacity constraints. The focus on the challenges posed by non-differentiability and the proposed solutions demonstrate a deep understanding of the complexities involved in inventory optimization. This algorithm is adapted from GAPS (Lin et al., 2024) to take into account specific aspects of inventory problems, in particular, the fact that the functions we are dealing with are not differentiable.",
+      "candidate_a_text": "This paper proposes an algorithm called GAPSI to solve online inventory problems. The contribution of this paper appears limited, as the proposed algorithm primarily adapts GAPS to inventory problems. Additionally, the approach to computing the gradient $\\nabla L_t (\\theta_t)$ has been extensively studied in the field of inventory management.",
+      "candidate_b_text": "This paper presents GAPSI, an algorithm that integrates the GAPS method from [1] for inventory control problems, and explains how common industry constraints such as perishability, lead times, and warehouse capacity can be mathematically modeled within the GAPS framework. However, after meticulously reading this article, I feel that the biggest issue is that it merely provides a detailed implementation guide and an empirical simulation evaluation of how the GAPS in article [1] can be applied to real inventory replenishment management. This article is primarily inclined towards empirical evaluation and presenting some implementation details regarding how the GAPS framework in article [1] can be applied to real inventory replenishment management, and I feel that this article is more like a heuristic guidance manual for inventory management that could be posted on arXiv or SSRN. My concern is that this article resembles a case study, lacking comprehensive theoretical proof and large-scale real-world practice.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "Human Review 1",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "human",
+        "candidate_b_system_or_id": 1,
+        "consensus_info": {
+          "consensus_review": 0,
+          "consensus_score": 0.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            1
+          ],
+          "agreement_matrix": {
+            "0": {
+              "0": true,
+              "1": false
+            },
+            "1": {
+              "0": false,
+              "1": true
+            }
+          },
+          "agreement_scores": {
+            "0": 0.0,
+            "1": 0.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 39
+    },
+    {
+      "id": 5,
+      "paper_id": "cRR0oDFEBC",
+      "reference_text": "This paper introduces AUTOIF, a generic and automated framework designed to generate high-quality training data for enhancing the instruction-following capabilities of large language models (LLMs) by leveraging code-based verification and execution feedback. While the approach emphasizes scalability and the synthesis of both positive and negative examples for instruction alignment, the core idea of automatic instruction verification is not entirely novel. Prior works such as CodeLlama2, PLUM, LLaMA3, SelfCodeAlign, and DeepSeek-Coder-V2 have already explored code-based execution feedback and automated instruction alignment, with CodeLlama2 and LLaMA3, for example, incorporating code synthesis and validation frameworks to improve instruction-following performance. These existing efforts establish code execution as a natural and effective source of feedback for aligning LLMs. As a result, although AUTOIF may offer incremental advances in terms of scalability and data synthesis, it does not represent a fundamentally new direction in the field. The main contribution appears to be the integration and automation of these established techniques at scale, rather than the introduction of a novel conceptual framework for instruction verification.",
+      "candidate_a_text": "This paper introduces AutoIF, an automated pipeline for synthesizing high-quality instruction-following training data. AutoIF addresses a significant challenge in instruction-following by providing a scalable way to generate high-quality, verifiable instruction-following data.",
+      "candidate_b_text": "This paper presents a novel method called AutoIF to automatically generate instruction following training data by leveraging code verification to validate the correctness of such data. The core innovation of AutoIF is in transforming the validation of instruction following data quality into a code verification problem, requiring large language models to generate instructions, the corresponding verification code, and unit test samples to cross-validate code correctness. According to the review, this is a creative combination of ideas not explored before; AutoIF represents an innovative approach that uses LLMs not only to generate responses but also to verify the quality of their own responses. The reviewer notes that the fact that AutoIF is the first to surpass 90% accuracy in IFEval’s loose instruction accuracy further highlights the originality and effectiveness of the proposed method. The reviewer did not cite any closely related prior works implementing similar code verification methodologies for instruction following data generation, suggesting a strong level of novelty in both the idea and its implementation as presented.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: deepreviewer_partial",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "deepreviewer_partial",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 15
+    },
+    {
+      "id": 30,
+      "paper_id": "QFaj7InstQ",
+      "reference_text": "This paper introduces the Item Language Model (ILM), a framework designed to bridge behavioral embeddings from recommendation systems with language understanding in Large Language Models (LLMs). The core contribution lies in adapting a Querying Transformer (QFormer) architecture with a novel item-item contrastive loss, enabling unified and interleaved processing of both behavioral and textual information for language generation tasks. The approach demonstrates innovation in its use of QFormer with item-item contrastive learning to address the modality gap between recommendation signals and language understanding. While this represents a creative step toward integrating behavioral and semantic information, the novelty is somewhat limited by the existence of related work, such as LC-Rec and BinLLM, which also aim to bridge collaborative and semantic signals within large language models. The main distinction of this paper is the specific adaptation of QFormer and the introduction of the item-item contrastive loss, which is well-justified and empirically validated. However, a more thorough comparison with these recent LLM-based recommendation systems would help to better establish the unique contributions and boundaries of novelty. Overall, the paper offers an interesting and incremental advance in the integration of recommendation and language modeling, but its novelty would be strengthened by a clearer articulation of differences from closely related approaches.",
+      "candidate_a_text": "This paper proposes a novel framework called Item-Language Model (ILM) that combines the strengths of traditional recommendation systems with large language models, addressing the limitations of both approaches. The introduction of an item-item contrastive loss and a user-item contrastive loss is presented as a contribution to help preserve behavioral information while adapting to the text modality, and the two-phase training workflow is introduced to reduce the computational cost of fully fine-tuning large language models while achieving comparable performance. However, the motivation for this research is unclear, particularly regarding the benefits of joint training on language and recommendation tasks, and the authors do not provide a compelling rationale for why an item-language model is necessary or what specific advantages it offers over existing approaches that separate these tasks. The paper lacks a thorough comparison with existing state-of-the-art methods, making it difficult to assess the true originality and significance of the proposed method, and does not clearly explain the limitations of existing approaches or how the ILM overcomes them.",
+      "candidate_b_text": "This paper proposes a novel approach by adapting the Querying Transformer model to align behavioral and textual data in recommendation systems, integrating collaborative filtering embeddings with large language models. Although these methods are mentioned in the related work, a more detailed comparison with other methods that integrate collaborative filtering with LLMs, such as CoLLM and OpenP5, would strengthen the paper.",
+      "candidate_a_label": "AI System: deepreviewer",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "deepreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 41
+    },
+    {
+      "id": 43,
+      "paper_id": "c4w1TqcSi0",
+      "reference_text": "This paper introduces a framework based on an iterative generate, rank, select, and train paradigm to address inter-agent communication and task inference challenges within LLM-based MAS, building iSFT and iDPO on this iteration paradigm. However, the methods iSFT and iDPO seem to lack innovation. iDPO merely combines MCTS from ToT with DPO, while iSFT simply adds a step of supervised fine-tuning (SFT) after removing the prompt. These methods seem incremental rather than novel, and similar approaches can already be found, such as [1], [2], [3], [4], [5].",
+      "candidate_a_text": "The paper introduces OPTIMA, a novel training framework designed to optimize LLM-based multi-agent systems for enhanced communication efficiency and task effectiveness. The proposed method is novel, particularly in its use of MCTS to generate diverse trajectories for DPO training, which I find to be a smart approach to explore different interaction paths and identify high-quality data for training. The results demonstrate that OPTIMA consistently outperforms both single-agent MAS baselines and vanilla MAS, highlighting significant improvements in communication efficiency and task performance.",
+      "candidate_b_text": "**Summary for Reviewer:**\n\nOPTIMA is a multi-agent LLM framework that formally integrates multi-objective reward optimization—balancing task performance, token efficiency, and communication readability—using an iterative generate-rank-select-train paradigm and MCTS-inspired DPO data generation. While the approach is well-positioned at the intersection of multi-agent debate, process-level optimization, preference modeling, and communication efficiency, most of its components and their combinations have been explored in prior work, making the main technical delta the formal unification and application context rather than fundamentally new algorithms. The authors’ claims of novelty, particularly regarding unified optimization and MCTS-inspired DPO in MAS, are somewhat overstated, as similar ideas have appeared in related literature, though OPTIMA’s explicit reward formalism and MAS adaptation are more formalized. The empirical improvements reported are substantial, but may be partly attributable to implementation choices and task selection, and the work would benefit from more direct comparisons to closely related methods (e.g., SimPO, ReST-MCTS*). Overall, OPTIMA is a strong, contemporary integration of recent trends in the field, but its contributions are primarily incremental and formal rather than radically innovative.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: ours",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 1,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "ours",
+        "consensus_info": {
+          "consensus_review": 1,
+          "consensus_score": 1.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            2
+          ],
+          "agreement_matrix": {
+            "1": {
+              "1": true,
+              "2": true
+            },
+            "2": {
+              "1": true,
+              "2": true
+            }
+          },
+          "agreement_scores": {
+            "1": 1.0,
+            "2": 1.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 8
+    },
+    {
+      "id": 75,
+      "paper_id": "2ofVtMvRil",
+      "reference_text": "This study demonstrates that predictive coding can effectively train neural networks to develop hexagonal grid representations from spatial inputs, providing a biologically plausible explanation for the emergence of grid cells in the medial entorhinal cortex. However, my major concern is that the work may lack novelty. The use of non-negative and sparse network designs to produce grid cell-like patterns has been extensively discussed, with prior work reporting that non-negative and sparse properties can generate grid cell-like patterns and theoretically demonstrating why non-negativity is the main driver of grid cell formation, which the author's paper does not address, instead of sparsity. Similar findings have also been reported elsewhere, and earlier work proves that a nonnegativity constraint on firing rates induces a symmetry-breaking mechanism favoring hexagonal firing fields, with further studies exploring the necessary conditions for generating grid cells. Prediction tasks, including path integration, that produce grid cell-like patterns have also been widely reported, especially when the input data takes a place cell-like form, and other studies have used place cell-like input and path integration tasks to train networks and generate grid cells, while some have theoretically analyzed the role of predictive learning in forming low-dimensional representations. In my understanding, tPCN is very similar to a one-step RNN (apart from the difference in local learning rules), so the fact that its training process resembles that of one-step tBPTT is not surprising; as previously noted, the key to forming grid cells lies in the predictive task, not the RNN network itself, and therefore, the similarity between tPCN and RNN does not offer significant insight into the generation of grid cells. For these reasons, I believe this paper does not offer substantial novelty or make a clear contribution to the field.",
+      "candidate_a_text": "This paper makes a novel connection between predictive coding networks and grid cells by showing that predictive coding networks can extract grid cell representations from place cell inputs and that temporal predictive coding networks can learn to integrate velocity information to learn grid cell representations. However, there are many models that can learn grid cells, including attractor network models and other predictive models, so it is not clear why predictive coding networks are particularly suited for this task, and the paper does not provide a strong motivation for this connection. While the paper briefly mentions some existing models, it does not provide a comprehensive comparison to them, and a more detailed comparison—including an analysis of the computational requirements and biological plausibility of different models—would help in evaluating the originality and significance of the contribution.",
+      "candidate_b_text": "This paper introduces a novel approach to modeling grid cell formation in the medial entorhinal cortex using predictive coding networks (PCNs). I find the use of predictive coding to model grid cell emergence to be a novel and compelling approach, offering a biologically plausible alternative to models that rely on backpropagation, which is unlikely to be implemented in the brain. The paper’s main contribution lies in its novel application of predictive coding to model grid cell emergence, providing a unified learning algorithm for diverse cortical representations. The authors successfully demonstrate that grid cells can arise as latent representations learned through predictive coding in both static and dynamic environments—a significant contribution to the field—and show that the learning rule of temporal predictive coding networks (tPCNs) implicitly approximates truncated backpropagation through time (BPTT). They compare their model with recurrent neural networks trained with BPTT, showing that both models can achieve similar performance in terms of path integration and grid score, while emphasizing the biological plausibility of their approach. However, I note several weaknesses that limit the clarity of the paper’s originality: the work lacks a detailed comparison with prior models, particularly recurrent neural networks and attractor networks, making it difficult to fully appreciate the unique contributions of the proposed model. While the authors mention advantages such as not requiring biologically implausible backpropagation and addressing the need for local learning rules, they do not provide an in-depth analysis of how their model mechanistically diverges from or improves upon existing approaches. This leaves the reader with an incomplete understanding of how the PCN model advances the field beyond existing models, and undermines the assessment of its true novelty and significance. Overall, I believe the paper makes a significant contribution by presenting a novel and biologically plausible model for grid cell formation, but the originality would be better established with a more thorough and mechanism-level comparison to prior work.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: deepreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 1,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "deepreviewer",
+        "consensus_info": {
+          "consensus_review": 1,
+          "consensus_score": 1.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            3
+          ],
+          "agreement_matrix": {
+            "1": {
+              "1": true,
+              "3": true
+            },
+            "3": {
+              "1": true,
+              "3": true
+            }
+          },
+          "agreement_scores": {
+            "1": 1.0,
+            "3": 1.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 14
+    },
+    {
+      "id": 52,
+      "paper_id": "W48CPXEpXR",
+      "reference_text": "This paper investigates the potential of \"good hallucinations\" in Large Language Models (LLMs) by redefining hallucinations—traditionally considered as model errors—as possible drivers of creative problem-solving. The authors introduce a creativity metric that combines the accuracy and diversity of generated reasoning paths, and they empirically explore how different prompting strategies and temperature settings affect the creativity and correctness of LLM outputs across several reasoning and problem-solving datasets. The central contribution lies in the novel perspective of treating certain hallucinations as beneficial for creativity, rather than solely as failures to be minimized. This reframing is a fresh and interesting direction that aligns with emerging interests in the unexpected behaviors of LLMs. However, while the conceptual shift is noteworthy, the novelty is somewhat limited by the narrow operationalization of \"good hallucinations\" as divergent reasoning paths that still lead to correct answers. This definition may not fully capture the broader and more nuanced aspects of creativity, especially in domains where correctness is subjective or ill-defined. Furthermore, the proposed creativity metric, which primarily measures diversity among correct outputs, is relatively simplistic and does not engage deeply with established theories of creativity or originality. As such, while the paper’s premise is original and worth exploring, its concrete contributions are incremental, and the work would benefit from a more rigorous justification of its definitions and metrics, as well as a broader exploration of creative domains beyond logical and mathematical reasoning.",
+      "candidate_a_text": "This assessment reviews a submission that reframes LLM hallucinations as potential sources of creativity, proposing systematic metrics and protocols to evaluate \"good hallucinations\"—outputs that are both creative and correct. The work is well-situated within current research trends, drawing on recent surveys and domain-specific studies (e.g., FiSTECH), and advances the field by explicitly operationalizing and empirically validating creativity-focused hallucination metrics, such as TTCT-inspired measures and semantic clustering. However, the assessment notes that the submission sometimes overstates its novelty, as similar ideas and metrics have been discussed or implemented in prior work, particularly in domain-specific contexts. The main contribution is the integration and generalization of these evaluation strategies for broader LLM use, rather than the introduction of fundamentally new concepts or methodologies. Overall, the submission is a timely and systematic, but incremental, advance that reflects and extends ongoing shifts in the field toward nuanced, creativity-aware evaluation of LLM outputs.",
+      "candidate_b_text": "This paper introduces the novel concept of \"good hallucination\" in LLMs, challenging the usual negative connotation of hallucinations and highlighting their potential role in creativity. The authors propose a novel creativity metric that combines accuracy and diversity, providing a more holistic evaluation of LLM performance. However, the paper does not compare the proposed creativity metric with existing creativity assessment methods, making it difficult to evaluate the validity and reliability of the new metric.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 30
+    },
+    {
+      "id": 20,
+      "paper_id": "dTGH9vUVdf",
+      "reference_text": "The paper introduces FreeVS, an approach to view synthesis for driving scenes that overcomes limitations of existing methods, which primarily focus on synthesizing camera views along pre-recorded vehicle trajectories. The authors proposed a \"psuedo LiDAR controlnet\" for SVD, which is easy yet effective. The benchmark of novel trajectory synthesis looks interesting to me, and the authors proposed two benchmarks for evaluating novel camera synthesis and novel trajectory synthesis. While the baseline methods are not specifically designed for the similar purpose of the paper, there are works that use virtual warping for improving the novel view quality such as [1] [2], that might be better for the baselines. This reminds me of the existing novel trajectory synthesis benchmark [3], and the authors should test their methods on such a dataset and demonstrate the absolute performance gain using the metrics of PSNR, SSIM, etc. I personally like the idea of the paper, but I still have many concerns and would provide a final rating based on the authors' responses.",
+      "candidate_a_text": "FREEVS is a generative novel view synthesis (NVS) method for driving scenes that introduces a pseudo-image representation to enable pose control and 3D consistency, evaluated on challenging out-of-trajectory benchmarks with geometry consistency assessed via 3D detectors. While the pseudo-image approach is a novel technical variant, the overall paradigm—generative, pose-controllable NVS for driving scenes—has been addressed by recent works such as MagicDrive3D, WoVoGen, and MapNeRF, making the claim of being \"first\" overstated. The authors’ characterizations of prior work sometimes exaggerate their limitations, particularly regarding out-of-trajectory synthesis and pose control precision, and omit some relevant recent methods. The main technical delta lies in the specific representation and training pipeline, while the use of new benchmarks and geometry consistency metrics represents an incremental rather than fundamental advance. Reviewers should note that FREEVS’s contributions are best understood as a novel variant within a rapidly evolving field, rather than a wholly new paradigm.",
+      "candidate_b_text": "This paper presents FreeVS, a Video Stable Diffusion-based generative view synthesis method for driving scenes that synthesizes high-quality camera views both on and beyond recorded trajectories. The key innovation is the clever use of pseudo-images obtained through colored point cloud projection as a unified representation for all view priors, which simplifies the learning objective for the generative model. As opposed to recent contenders that rely on gaussian splatting or nerfs to represent the scene, the authors train a diffusion model on colored LiDAR point clouds. While the method introduces two new challenging benchmarks and outperforms previous approaches, the novelty is somewhat limited as the contribution boils down to an addon for Video Stable Diffusion that has colored LiDAR point features concatenated. The method trades the gaussian and nerf artifacts with diffusion ones, and while FreeVS works better than previous attempts from novel views, for single front view, splatting still yields significantly better results.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "Human Review 4",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 1,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "human",
+        "candidate_b_system_or_id": 4,
+        "consensus_info": {
+          "consensus_review": 1,
+          "consensus_score": 0.0,
+          "num_reviews": 3,
+          "consensus_type": "majority",
+          "other_reviews": [
+            3,
+            4
+          ],
+          "agreement_matrix": {
+            "1": {
+              "1": true,
+              "3": false,
+              "4": false
+            },
+            "3": {
+              "1": false,
+              "3": true,
+              "4": false
+            },
+            "4": {
+              "1": false,
+              "3": false,
+              "4": true
+            }
+          },
+          "agreement_scores": {
+            "1": 0.0,
+            "3": 0.0,
+            "4": 0.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 12
+    },
+    {
+      "id": 67,
+      "paper_id": "gRmWtOnTLK",
+      "reference_text": "This paper considers a method for reconstructing the waveform from Mel-spectrogram or discrete acoustic tokens by generating complex spectrograms and performing reconstruction on a frame level, achieving audio generation much faster than in real time. The paper's novelty is in question, as it mainly combines existing components (multiband rectified flow and ConvNeXt V2) rather than proposing a fundamentally new approach. While this engineering solution may have merit in specific applications, the lack of novel contributions limits the paper's impact. Strengthening the theoretical foundation or providing a unique methodological contribution would be beneficial in highlighting the algorithm’s distinct value.",
+      "candidate_a_text": "RFWave is an integrative approach that combines rectified flow, multi-band processing, and frame-level modeling for efficient and high-fidelity audio waveform reconstruction from Mel-spectrograms. While this specific combination is new for the task, each individual component—rectified flow (VoiceFlow), multi-band processing (Multi-Band Diffusion), and frame-level modeling (APNet2/Vocos)—has been explored in prior work. The authors' claims of being \"first\" in several aspects are somewhat overstated, as relevant works (notably VoiceFlow and PeRFlow) are omitted from citations, which may misrepresent the maturity of rectified flow in audio. The main technical contributions, such as a new sampling time point selection and overlap loss, appear to be incremental enhancements rather than conceptual breakthroughs. Overall, RFWave should be viewed as a strong compositional advance that synthesizes recent trends, and reviewers are encouraged to request direct comparisons to omitted related works for a more complete assessment of novelty.",
+      "candidate_b_text": "This paper presents RFWave, a novel approach for audio waveform reconstruction using a multi-band Rectified Flow model. The integration of Rectified Flow and the use of STFT frames for parallel processing significantly improve the sampling speed, making RFWave highly efficient compared to existing diffusion-based methods. The paper includes extensive experiments comparing RFWave with existing diffusion and GAN-based models, demonstrating its superior performance in terms of quality and computational efficiency.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 2,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {
+          "consensus_review": 2,
+          "consensus_score": 0.5,
+          "num_reviews": 3,
+          "consensus_type": "majority",
+          "other_reviews": [
+            3,
+            4
+          ],
+          "agreement_matrix": {
+            "2": {
+              "2": true,
+              "3": true,
+              "4": false
+            },
+            "3": {
+              "2": true,
+              "3": true,
+              "4": false
+            },
+            "4": {
+              "2": false,
+              "3": false,
+              "4": true
+            }
+          },
+          "agreement_scores": {
+            "2": 0.5,
+            "3": 0.5,
+            "4": 0.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 46
+    },
+    {
+      "id": 70,
+      "paper_id": "7hM5597bCv",
+      "reference_text": "This paper suggests improving IQL to train a value function using OOD but constrained actions, by instead using a skill prior learned by diffusion, and further proposes adaptive re-evaluation, which re-plans the trajectory if the future value function becomes worse than the current value function. However, it seems that DIAR is an incremental improvement of LDCQ, which changed the base offline algorithm from BCQ to IQL, and specifically, DIAR uses the same procedure of LDCQ for getting the latent priors, using $\\beta$-VAE for latent representation and getting the latent priors via diffusion. DAIR seems to be the IQL version of LDCQ plus Adaptive re-evaluation, and I would appreciate clarification on the differences between LDCQ and DIAR.",
+      "candidate_a_text": "DIAR is positioned as an incremental extension of recent diffusion model-based offline RL methods, particularly LDCQ and IDQL, by integrating diffusion-based trajectory modeling with implicit Q-learning and introducing an adaptive revaluation mechanism for dynamic decision length adjustment. The main technical novelty lies in this adaptive revaluation, which allows the policy to adjust decision horizons dynamically—a feature not present in the most closely related prior work, though conceptually related to adaptive horizon methods in RL. Other aspects, such as alternating training between real and generated samples and the integration of diffusion models with IQL, are routine adaptations already explored in the literature, making these contributions less distinctive. The authors’ claims of consistent state-of-the-art performance and strong differentiation from prior work are not fully substantiated in the provided excerpt, and some rhetorical distinctions (e.g., “assisting” vs. “guiding” Q-learning) are not technically meaningful. Overall, while DIAR offers a modest technical advance with its adaptive revaluation mechanism, its other contributions are incremental, and a more thorough comparison to recent diffusion-based RL methods would be necessary to fully establish its impact.",
+      "candidate_b_text": "This paper introduces Diffusion-model-guided Implicit Q-learning with Adaptive Revaluation (DIAR), an offline reinforcement learning approach that integrates a diffusion model to generate diverse latent trajectories, an Adaptive Revaluation mechanism for adjusting decision lengths, and a Q-network learning approach with value function guidance from the diffusion model. The idea of using diffusion models to generate diverse latent trajectories for offline RL is interesting. However, the proposed method is not novel. The idea of using diffusion models to generate diverse latent trajectories for offline RL has already been explored in the literature, and the proposed method seems to be a combination of existing techniques. The authors claim that the existing diffusion-based offline RL methods do not avoid the Q-function, which is not true; for example, the Diffuser learns a policy without any Q-function. The authors should clearly state their novelty and contributions compared to these existing methods.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {
+          "consensus_review": 0,
+          "consensus_score": 1.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            3
+          ],
+          "agreement_matrix": {
+            "0": {
+              "0": true,
+              "3": true
+            },
+            "3": {
+              "0": true,
+              "3": true
+            }
+          },
+          "agreement_scores": {
+            "0": 1.0,
+            "3": 1.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 36
+    },
+    {
+      "id": 28,
+      "paper_id": "N2sN3LESoW",
+      "reference_text": "This paper identifies that the binary format of RLHF data labels fails to reflect the actual pairwise difference of human preference and proposes to weight the pairwise samples with respect to the semantic gap in order to provide supervision signals beyond binary labels. The proposed method is simple and has a clear connection to related works. The data-dependent margin and beyond-binary motivation is a good direction for preference optimization, however what the paper presents doesn't fully exploit the potential, as there can be a much wider spectrum of margins that more faithfully match the motivation, such as length difference or response-level LM embedding distance. A more comprehensive study over these options may bring in further contribution in this direction and potentially address the non-improvement for Arena-Hard and MT-Bench.",
+      "candidate_a_text": "The submission introduces GaPO, a preference optimization method for LLM alignment that replaces fixed or tunable loss margins with margins dynamically set by external semantic similarity metrics (e.g., ROUGE L, Jaccard, BERTScore), aiming to better capture the intensity of human preferences. While this is a clear technical extension of prior work such as SimPO (which uses a tunable margin) and WPO (which applies dynamic weighting), the main novelty lies in the explicit use of semantic gap metrics to modulate the loss, rather than in the overall optimization framework. The conceptual advance is modest, as the loss structure closely mirrors existing approaches, and the idea of using external metrics to adapt loss terms is common in NLP. Empirical results show a modest improvement over state-of-the-art baselines, but these gains may be influenced by implementation details or metric selection rather than the core conceptual innovation. Overall, the work represents an incremental but well-executed advance in a mature and competitive field, and reviewers should weigh the technical clarity of the extension against the limited conceptual novelty.",
+      "candidate_b_text": "This paper introduces Gap-Aware Preference Optimization (GaPO), which I find to be a novel and well-motivated approach to preference optimization. The authors correctly identify a key limitation of traditional RLHF methods—their reliance on binary labels that fail to capture nuanced differences in human preferences—and address this by incorporating the degree of semantic gaps into the loss function. GaPO provides a more granular supervisory signal, allowing the model to better understand and reflect the subtleties of human perception, which is a significant contribution that addresses a critical challenge in the field. The method is differentiated from prior work by explicitly quantifying the semantic gap using metrics such as Jaccard Score, ROUGE, and BERTScore, and using this as a basis for loss margin adjustment rather than binary labels. My assessment is that the introduction of GaPO represents a strong and original contribution, particularly in its empirical demonstration of surpassing existing state-of-the-art methods on widely used benchmarks such as AlpacaEval 2.0, with GaPO-ROUGE_L achieving a notable win rate. The paper’s thorough exploration of different forms of the loss function and mapping functions, as well as its analysis of various evaluation metrics, further supports the distinctiveness and robustness of the proposed approach. Overall, the combination of a novel method, its strong empirical results against leading baselines, and its focus on addressing a key shortcoming in preference optimization underscores the significance of the contribution.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: deepreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 1,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "deepreviewer",
+        "consensus_info": {
+          "consensus_review": 1,
+          "consensus_score": 0.6666666666666666,
+          "num_reviews": 4,
+          "consensus_type": "majority",
+          "other_reviews": [
+            0,
+            2,
+            3
+          ],
+          "agreement_matrix": {
+            "0": {
+              "0": true,
+              "1": true,
+              "2": false,
+              "3": false
+            },
+            "1": {
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": false
+            },
+            "2": {
+              "0": false,
+              "1": true,
+              "2": true,
+              "3": false
+            },
+            "3": {
+              "0": false,
+              "1": false,
+              "2": false,
+              "3": true
+            }
+          },
+          "agreement_scores": {
+            "0": 0.3333333333333333,
+            "1": 0.6666666666666666,
+            "2": 0.3333333333333333,
+            "3": 0.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 25
+    },
+    {
+      "id": 77,
+      "paper_id": "QipLSeLQRS",
+      "reference_text": "This paper proposes reinforcement learning from hindsight simulation (RLHS) as a method to improve preference labeling for large language model (LLM) outputs by simulating plausible downstream consequences of LLM responses and presenting these, alongside the original outputs, to human labelers. While the problem addressed—ensuring that LLM outputs are evaluated based on their real-world impact rather than immediate surface-level appeal—is important and potentially underexplored, it is not new. The central insight that the utility of an AI system’s output is determined by its real-world consequences rather than intrinsic properties has already been explored in prior work, notably by Lang et al., as cited by the authors. As such, neither the problem setting nor this insight constitutes a novel contribution. The proposed solution of simulating outcomes and providing them to preference labelers appears, to the best of my knowledge, not to have been directly explored in previous academic papers, but it represents only an incremental advance. The approach does not introduce new algorithmic developments or theoretical findings, relying instead on LLM prompting to supply additional context to labelers. Given the lack of novelty in the problem framing, the incremental nature of the proposed solution, and the absence of strong empirical or theoretical results, I do not find the paper’s contributions to be significant or original enough to advance the field. Overall, while RLHS is a potentially interesting direction, the current work does not demonstrate sufficient novelty in either its problem setting or its proposed methodology.",
+      "candidate_a_text": "This assessment reviews RLHS, a method that introduces simulated hindsight feedback to address misalignment issues (such as sycophancy and reward hacking) in LLM alignment, positioning it as a novel extension of RLHF, DPO, and RLAIF. The main technical contribution is the adaptation of hindsight simulation—previously established in dialog and robotics RL—to the domain of LLM preference optimization, which is a meaningful but not fundamentally new conceptual advance. While empirical results show reduced misalignment compared to RLHF, DPO, and RLAIF, the attribution of these gains specifically to hindsight simulation is not fully isolated from other implementation factors. The submission overstates its conceptual novelty by not citing relevant hindsight/simulation work in other RL domains, and some contributions (e.g., compatibility with PPO/DPO, Goodhart’s law analysis) are routine extensions rather than core innovations. Reviewers should recognize the substantive domain adaptation as the main delta, but weigh the omission of related RL literature and the incremental nature of the advance when assessing novelty and significance.",
+      "candidate_b_text": "The paper introduces Reinforcement Learning from Hindsight Simulation (RLHS), a novel approach to mitigate misalignment in RLHF by focusing on the downstream consequences of AI actions. It identifies a critical issue in existing RLHF approaches and proposes a novel solution that is both well-reasoned and effectively presented. The results demonstrate that RLHS outperforms traditional RLHF methods in terms of user satisfaction and true utility, which is a significant contribution to the field. The reduction in misalignment and deception is particularly noteworthy and has important implications for the development of more trustworthy AI systems.",
+      "candidate_a_label": "AI System: ours",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "ours",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 23
+    },
+    {
+      "id": 93,
+      "paper_id": "AAjCYWXC5I",
+      "reference_text": "This paper introduces a zero-shot in-context adversarial learning framework for Large Language Models (LLMs) aimed at enhancing research ideation. The approach leverages a multi-agent system inspired by the academic peer review process, with distinct proposer, reviewer, and area chair roles, to iteratively refine research ideas along the axes of novelty and feasibility. This framework fills a notable gap in the field by conceptually adapting adversarial learning to the context of LLM-driven idea generation, an area that has seen limited exploration. The use of a peer review-inspired multi-agent setup to promote iterative improvement in idea generation represents a conceptually novel contribution, distinguishing the work from prior approaches that typically do not model such structured, adversarial interactions among LLM agents. Overall, the paper’s novelty lies in its creative adaptation of adversarial learning principles and academic peer review dynamics to the automated ideation process, offering a fresh perspective and a promising direction for advancing LLM-based research support systems.",
+      "candidate_a_text": "This paper proposes an adversarial training approach for large language models (LLMs) to improve research ideation, involving a multi-LLM-agent interaction system where one agent generates ideas and another evaluates them using a novel relative quality ranking metric. The primary novelty claims rest on the introduction of this relative quality ranking metric for evaluating open-ended generation and the multi-LLM-agent system for zero-shot in-context adversarial learning. While the approach is presented as innovative in addressing the quality of research ideation, the review notes that the evaluation is limited to a self-constructed dataset without comparison to established benchmarks, raising questions about the generalizability and distinctiveness of the method. Additionally, the review highlights the need for a more detailed explanation of how novelty and feasibility are defined and measured within the system, as well as a more comprehensive ablation analysis to clarify each component's unique contribution. Overall, while the paper claims novelty through its ranking metric and multi-agent adversarial framework, the significance and originality of the contribution remain unclear due to the lack of detailed comparative analysis and insufficient articulation of how the approach differs from or advances beyond existing work.",
+      "candidate_b_text": "This paper introduces a zero-shot in-context adversarial learning framework to enhance research ideation using multi-LLM-agent interactions, where a proposer agent, reviewer agent, and area chair agent iteratively refine research ideas along novelty and feasibility dimensions, mirroring the academic review process. The multi-agent framework is well-designed, highly engaging, and interactive. The authors also propose a relative quality ranking metric to evaluate idea generation quality, showing that this approach significantly improves the novelty and feasibility of generated research ideas.",
+      "candidate_a_label": "AI System: deepreviewer_partial",
+      "candidate_b_label": "AI System: openreviewer",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "deepreviewer_partial",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "openreviewer",
+        "consensus_info": {
+          "consensus_review": 0,
+          "consensus_score": 0.0,
+          "num_reviews": 2,
+          "consensus_type": "majority",
+          "other_reviews": [
+            1
+          ],
+          "agreement_matrix": {
+            "0": {
+              "0": true,
+              "1": false
+            },
+            "1": {
+              "0": false,
+              "1": true
+            }
+          },
+          "agreement_scores": {
+            "0": 0.0,
+            "1": 0.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 33
+    },
+    {
+      "id": 31,
+      "paper_id": "xYzOkOGD96",
+      "reference_text": "This paper introduces a task, dataset, and model for grounded video caption generation, specifically defining the task as GROunded Video Caption Generation (GROC), creating a manually annotated test set, and proposing the VideoGLaMM model trained on a newly constructed HowToGround dataset. However, the claimed novelty of the task is not well supported. The concept of grounded video captioning is not new, as prior work such as Zhou et al. (2019) in \"Grounded Video Description\" [1] has already collected grounded video-text datasets and proposed models that leverage grounding information to improve video descriptions. In the vision-and-language community, the terms \"video description\" and \"video captioning\" are generally used interchangeably, and the distinction made in this submission does not constitute a fundamentally new task. A direct comparison of figures from this submission and from Zhou et al. (2019) further highlights the overlap. Therefore, the claim that the task is newly proposed by the authors is not justified. Regarding the model, the main change appears to be the replacement of previous LSTM-based language modules with large language models (LLMs), which, while potentially improving results, does not represent a significant innovation in model structure. The assertion that producing spatio-temporally grounded video descriptions has received little attention is also inaccurate, as several relevant works ([1], [2], [3], [4]) have addressed similar challenges. Overall, the paper’s contributions are incremental, and the novelty is limited both in terms of task definition and model design. The submission would benefit from a more thorough discussion and comparison with prior work to accurately position its contributions within the existing literature.",
+      "candidate_a_text": "The paper proposes a new task of grounded video caption generation, where objects in the caption are grounded in the video via temporally consistent bounding boxes. It introduces a manually annotated test dataset and presents an automatic annotation method that leverages existing grounded still image captioning models and large language models to create a large-scale training dataset, which is a significant contribution to the field. However, while the automatic annotation method is a contribution, it is a straightforward extension of existing image-based grounded captioning and LLMs. The results of the introduced VideoGLaMM model set the state of the art for this new task.",
+      "candidate_b_text": "This paper introduces a new task called grounded video caption generation, which involves generating captions for videos while also providing bounding boxes for the objects mentioned in the captions. While the paper characterizes the task as novel and notes that it has not been extensively explored in previous work, the reviewer expresses concerns regarding the degree of originality. Specifically, the reviewer argues that the proposed task is not particularly novel, as it simply combines the established tasks of video captioning and object grounding, and the motivation for doing so is not clearly justified nor shown to be significantly more challenging than the individual tasks addressed separately. The reviewer suggests that the paper would benefit from a more compelling justification for why addressing these two tasks jointly is necessary. Thus, while the effort to combine these areas and construct related datasets is acknowledged, the overall contribution is viewed as having limited novelty without a stronger rationale or demonstration of distinct new challenges introduced by the integration.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: deepreviewer_partial",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "deepreviewer_partial",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 2
+    },
+    {
+      "id": 87,
+      "paper_id": "waIltEWDr8",
+      "reference_text": "This paper proposes to combine B-cos networks as feature extractor and a relatively common version of few-shot learning. Masking limitations in novelty: lets be clear: The Nadaraya-Watson head is (a simplified version of) few-shot learning. It is a softmax over negative distances between support samples and the test image. While it is appreciated that Wang and Sabuncu, 2022, gave a name to their analysis in order to emphasize a predecessor of few-shot learning, using this term in this paper suggests a larger or different novelty than there actually is. It should be made prominently clear in the manuscript that the Nadaraya-Watson head is effectively few-shot learning (seemingly without sampling random subsets of classes). The evidence head is a standard few shot head. Taking the positive part is a ReLU applied on a feature map. Again, that is renaming common parts to sound uncommon / novel. Masking limitations in novelty in such a way is disliked by the reviewer. This results in a low score for presentation. By that one cannot distinguish whether the contributions are actually mostly from the B-cos network or whether the few-shot head plays any role in (a) predictive performance or (b) attribution map quality. In the worst case the B-cos network alone does all the heavy lifting.",
+      "candidate_a_text": "This paper proposes a novel method that combines two existing methods—Nadaraya-Watson head for global explanations and B-cos networks for faithful local explanations—to provide both global and local explanations for neural network-based classification models. However, the novelty of the paper is limited, as the proposed method is simply a combination of two existing methods. The paper does not compare the proposed method with other explanation methods, which makes it difficult to evaluate its effectiveness against prior work.",
+      "candidate_b_text": "This paper presents WASUP, an inherently interpretable neural network for image classification that combines a B-cos network with a classification head learning support vectors, classifying images based on similarity in the latent space. The proposed method could be seen as an extension of the B-cos network; however, the paper is not novel. The support vectors are, in essence, prototypes as in a ProtoPNet, and the comparison between an input image's latent representations and support vectors is also similar to the comparison between latent representations and prototypes in a ProtoPNet. The proposed method is simply a combination of a B-cos network and a ProtoPNet. Since the main ideas behind the paper are mostly explored in prior work and there is no novelty, the paper lacks significance.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "Human Review 3",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 2,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "human",
+        "candidate_b_system_or_id": 3,
+        "consensus_info": {
+          "consensus_review": 2,
+          "consensus_score": 1.0,
+          "num_reviews": 3,
+          "consensus_type": "majority",
+          "other_reviews": [
+            3,
+            4
+          ],
+          "agreement_matrix": {
+            "2": {
+              "2": true,
+              "3": true,
+              "4": true
+            },
+            "3": {
+              "2": true,
+              "3": true,
+              "4": true
+            },
+            "4": {
+              "2": true,
+              "3": true,
+              "4": true
+            }
+          },
+          "agreement_scores": {
+            "2": 1.0,
+            "3": 1.0,
+            "4": 1.0
+          }
+        }
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 4
+    },
+    {
+      "id": 71,
+      "paper_id": "KwPUQOQIKt",
+      "reference_text": "This paper introduces OmegaPRM, a divide-and-conquer Monte Carlo Tree Search (MCTS) algorithm designed to automate the collection of process supervision data for large language models (LLMs), with the goal of efficiently identifying the first error in a reasoning chain and thereby improving LLM performance on mathematical reasoning tasks. However, the novelty of OmegaPRM is limited, as the approach primarily combines established techniques—namely, MCTS and binary search. While the integration of these methods streamlines the data collection process and reduces reliance on human annotation, the core algorithmic contribution does not represent a significant departure from existing strategies in the literature. The paper would benefit from a more thorough comparison with prior work that leverages similar divide-and-conquer or search-based approaches, as well as a clearer articulation of how OmegaPRM advances beyond the straightforward combination of MCTS and binary search. Overall, the contribution is incremental, and the novelty is constrained by the reliance on well-known methods.",
+      "candidate_a_text": "This paper proposes OmegaPRM, an efficient method for generating process supervision data to train Process Reward Models (PRMs) for reasoning tasks like mathematical problem-solving. OmegaPRM automates the collection of process supervision data, significantly reducing the need for costly human annotations by introducing a divide-and-conquer MCTS algorithm that efficiently identifies errors and balances positive and negative examples, resulting in a large, high-quality dataset without human intervention. However, the paper does not provide a detailed comparison with other automated process supervision methods, such as Math-Shepherd and MiPS, in terms of data quality, efficiency, and model performance, so it is unclear what the unique advantages of OmegaPRM are over these methods. While the method is validated primarily on mathematical reasoning tasks, its effectiveness in other domains is not demonstrated. A more comprehensive comparison with prior work and an analysis of the noise introduced by automated annotations would help in understanding OmegaPRM's originality and significance.",
+      "candidate_b_text": "This submission presents an incremental advance in automated process supervision for LLM mathematical reasoning, primarily by scaling up fully automated process reward model (PRM) data collection using a new divide-and-conquer MCTS variant (OmegaPRM). While the work claims methodological novelty and full automation, similar MCTS-based automated pipelines (e.g., ReST-MCTS*, Math-Shepherd, HGS-PRM) already exist, and the technical distinction of the proposed MCTS variant is not fully established from the summary. The main contribution appears to be the creation of a larger-scale, fully automated process supervision dataset (1.5M+ annotations), with empirical gains on standard math reasoning benchmarks, though the qualitative improvement and source of gains (algorithmic vs. scale) are not fully isolated. The combination of weighted self-consistency decoding with process reward models is a logical extension of prior work rather than a conceptual leap. Overall, the submission is a strong incremental improvement, but its claims of novelty and automation are somewhat overstated, and more direct comparison to the latest related works would clarify its true contribution.",
+      "candidate_a_label": "AI System: openreviewer",
+      "candidate_b_label": "AI System: ours",
+      "metadata": {
+        "reference_type": "human_consensus",
+        "reference_review_id": 0,
+        "candidate_a_system": "openreviewer",
+        "candidate_b_type": "ai",
+        "candidate_b_system_or_id": "ours",
+        "consensus_info": {}
+      },
+      "assignment_type": "overlap",
+      "evaluator_sample_id": 6
+    }
+  ]
+}

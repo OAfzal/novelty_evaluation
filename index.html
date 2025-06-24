@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reference-Based Review Comparison</title>
+    <title>Hybrid Reference-Based Evaluation System</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,16 +26,25 @@
             padding-bottom: 20px;
             border-bottom: 2px solid #e0e0e0;
         }
-        .setup-form {
+        .evaluator-setup {
             text-align: center;
             margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
         }
-        .setup-form input {
+        .evaluator-setup h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .evaluator-setup input {
             padding: 10px;
             font-size: 16px;
             border: 2px solid #ddd;
             border-radius: 5px;
             margin-right: 10px;
+            width: 100px;
         }
         .btn {
             background-color: #007bff;
@@ -54,8 +63,50 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .btn-success {
+            background-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
         .evaluation-interface {
             display: none;
+        }
+        .progress-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .assignment-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .assignment-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .overlap-badge {
+            background-color: #ffeaa7;
+            color: #2d3436;
+        }
+        .unique-badge {
+            background-color: #74b9ff;
+            color: white;
         }
         .paper-info {
             background-color: #f8f9fa;
@@ -93,6 +144,9 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .reference-header {
             color: #28a745;
@@ -108,67 +162,53 @@
             background-color: #f8f9fa;
             padding: 25px;
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border-left: 4px solid #dc3545;
         }
-        .question-group {
+        .category-group {
             margin-bottom: 25px;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
             background-color: white;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
         }
-        .question-title {
+        .category-title {
             font-weight: bold;
             font-size: 16px;
-            margin-bottom: 8px;
-            color: #333;
+            margin-bottom: 10px;
+            color: #dc3545;
         }
-        .question-description {
+        .category-description {
             font-size: 14px;
             color: #666;
             margin-bottom: 15px;
             font-style: italic;
         }
-        .radio-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
+        .response-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
         }
-        .radio-option {
+        .response-option {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
             border-radius: 5px;
-            background-color: #f9f9f9;
             cursor: pointer;
             transition: all 0.3s;
+            background-color: #fff;
         }
-        .radio-option:hover {
-            background-color: #e9ecef;
+        .response-option:hover {
             border-color: #007bff;
+            background-color: #f8f9ff;
         }
-        .radio-option input[type="radio"] {
-            margin: 0;
-        }
-        .radio-option.selected {
-            background-color: #e3f2fd;
+        .response-option.selected {
             border-color: #007bff;
-            color: #0d47a1;
+            background-color: #007bff;
+            color: white;
         }
-        .comments-section {
-            margin-top: 20px;
-        }
-        .comments-section textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: inherit;
-            resize: vertical;
-            min-height: 100px;
+        .response-option input[type="radio"] {
+            margin-right: 8px;
         }
         .submit-section {
             text-align: center;
@@ -176,47 +216,57 @@
             padding-top: 20px;
             border-top: 2px solid #e0e0e0;
         }
-        .progress-info {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 14px;
-            color: #666;
+        .results-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            color: #155724;
         }
-        .loading {
-            text-align: center;
-            padding: 20px;
-        }
-        .error {
+        .error-message {
             background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
             color: #721c24;
             padding: 15px;
             border-radius: 5px;
             margin: 20px 0;
-            border: 1px solid #f5c6cb;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             margin: 20px 0;
-            border: 1px solid #c3e6cb;
         }
-        .stats-section {
-            background-color: #e9ecef;
+        .stat-card {
+            background-color: #f8f9fa;
             padding: 15px;
             border-radius: 5px;
-            margin-bottom: 20px;
             text-align: center;
+            border-left: 4px solid #007bff;
         }
-        @media (max-width: 1200px) {
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .download-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        @media (max-width: 768px) {
             .reviews-container {
                 grid-template-columns: 1fr;
-                gap: 15px;
             }
-            .radio-group {
-                flex-direction: column;
-                align-items: stretch;
+            .response-options {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -224,84 +274,111 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Reference-Based Review Comparison</h1>
-            <p>Compare two reviews/summaries against a reference human review across different categories</p>
+            <h1>Hybrid Reference-Based Evaluation System</h1>
+            <p>Compare AI-generated and human reviews against reference human reviews</p>
         </div>
 
-        <div id="stats-section" class="stats-section">
-            <div id="stats-content">Loading statistics...</div>
+        <!-- Authentication Gate -->
+        <div class="evaluator-setup" id="auth-gate">
+            <h3>🔐 Access Authentication</h3>
+            <p>This evaluation system is restricted to authorized evaluators only.</p>
+            <p>Please enter your access code and evaluator ID:</p>
+            <div style="margin: 20px 0;">
+                <input type="password" id="access-code" placeholder="Access code" style="width: 200px; margin-right: 10px;">
+                <input type="number" id="evaluator-id" placeholder="Evaluator ID (0, 1, 2...)" min="0" max="10" style="width: 200px;">
+            </div>
+            <button class="btn" onclick="authenticateAndLoad()">Access Evaluation System</button>
+            <div id="auth-error" style="color: red; margin-top: 10px; display: none;"></div>
+            <div id="evaluator-info" style="margin-top: 15px; display: none;">
+                <p><strong>Assignment Info:</strong></p>
+                <div id="assignment-details"></div>
+            </div>
         </div>
 
-        <div id="setup-section" class="setup-form">
-            <h3>Enter Your Evaluator ID</h3>
-            <input type="text" id="evaluator-id" placeholder="e.g., evaluator_001" maxlength="50">
-            <button class="btn" onclick="startEvaluation()">Start Evaluation</button>
-        </div>
-
-        <div id="loading-section" class="loading" style="display: none;">
-            <h3>Loading assignment...</h3>
-        </div>
-
-        <div id="error-section" class="error" style="display: none;"></div>
-        <div id="success-section" class="success" style="display: none;"></div>
-
-        <div id="evaluation-interface" class="evaluation-interface">
-            <div class="paper-info">
-                <h3>Paper ID: <span id="paper-id"></span></h3>
-                <p>Evaluation ID: <span id="evaluation-id"></span></p>
+        <!-- Evaluation Interface -->
+        <div class="evaluation-interface" id="evaluation-interface">
+            <!-- Progress Info -->
+            <div class="progress-info" id="progress-info">
+                <strong>Progress:</strong> <span id="current-sample">0</span> of <span id="total-samples">0</span> completed
+                <span id="assignment-type-indicator"></span>
             </div>
 
+            <!-- Paper Information -->
+            <div class="paper-info" id="paper-info">
+                <strong>Paper ID:</strong> <span id="paper-id">-</span>
+                <div class="assignment-info">
+                    <div><strong>Sample Type:</strong> <span id="sample-type">-</span></div>
+                    <div><strong>Evaluator Sample ID:</strong> <span id="evaluator-sample-id">-</span></div>
+                </div>
+            </div>
+
+            <!-- Reviews Display -->
             <div class="reviews-container">
                 <div class="review-box reference-box">
                     <div class="review-header reference-header">
-                        📋 Reference Review
-                        <div style="font-size: 14px; font-weight: normal; color: #666;">
-                            (<span id="reference-label"></span>)
-                        </div>
+                        <span>Reference (Human Review)</span>
+                        <span class="assignment-badge overlap-badge" id="reference-badge" style="display: none;">Overlap Sample</span>
                     </div>
-                    <div class="review-content" id="reference-content"></div>
+                    <div class="review-content" id="reference-content">Loading...</div>
                 </div>
-
+                
                 <div class="review-box candidate-box">
                     <div class="review-header candidate-header">
-                        🅰️ Candidate A
-                        <div style="font-size: 14px; font-weight: normal; color: #666;">
-                            (<span id="candidate-a-label"></span>)
-                        </div>
+                        <span id="candidate-a-label">Candidate A</span>
                     </div>
-                    <div class="review-content" id="candidate-a-content"></div>
+                    <div class="review-content" id="candidate-a-content">Loading...</div>
                 </div>
-
+                
                 <div class="review-box candidate-box">
                     <div class="review-header candidate-header">
-                        🅱️ Candidate B
-                        <div style="font-size: 14px; font-weight: normal; color: #666;">
-                            (<span id="candidate-b-label"></span>)
-                        </div>
+                        <span id="candidate-b-label">Candidate B</span>
                     </div>
-                    <div class="review-content" id="candidate-b-content"></div>
+                    <div class="review-content" id="candidate-b-content">Loading...</div>
                 </div>
             </div>
 
-            <div class="evaluation-form">
+            <!-- Evaluation Form -->
+            <div class="evaluation-form" id="evaluation-form">
                 <h3>Evaluation Questions</h3>
-                <p><strong>Instructions:</strong> For each category below, compare how well Candidate A and Candidate B align with the Reference Review. Select which candidate better matches the reference's approach in that specific aspect.</p>
-
-                <div id="questions-container">
-                    <!-- Questions will be dynamically populated -->
-                </div>
-
-                <div class="comments-section">
-                    <h4>Additional Comments (Optional)</h4>
-                    <textarea id="additional-comments" placeholder="Please provide any additional observations, explanations for your choices, or feedback about the evaluation process..."></textarea>
+                <p>For each category, compare Candidate A and Candidate B against the reference review:</p>
+                
+                <div id="categories-container">
+                    <!-- Categories will be populated by JavaScript -->
                 </div>
 
                 <div class="submit-section">
-                    <button class="btn" onclick="submitEvaluation()" id="submit-btn">Submit Evaluation</button>
-                    <button class="btn" onclick="getNewAssignment()" style="margin-left: 20px; background-color: #6c757d;">Get New Assignment</button>
+                    <button class="btn btn-success" onclick="submitEvaluation()" id="submit-btn">Submit Evaluation</button>
+                    <button class="btn btn-secondary" onclick="nextSample()" id="next-btn" style="margin-left: 10px;" disabled>Next Sample</button>
+                </div>
+            </div>
+
+            <!-- Results Info -->
+            <div class="results-info" id="results-info" style="display: none;">
+                <p><strong>Evaluation completed!</strong> Your response has been automatically downloaded and saved locally.</p>
+                <div class="download-section">
+                    <button class="btn" onclick="downloadResults()">Download All Results</button>
                 </div>
             </div>
         </div>
+
+        <!-- Statistics Display -->
+        <div class="stats-display" id="stats-display">
+            <div class="stat-card">
+                <div class="stat-number" id="completed-count">0</div>
+                <div class="stat-label">Evaluations Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="overlap-count">0</div>
+                <div class="stat-label">Overlap Samples</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="unique-count">0</div>
+                <div class="stat-label">Unique Samples</div>
+            </div>
+        </div>
+
+        <!-- Error Messages -->
+        <div id="error-container"></div>
     </div>
 
     <script src="app.js"></script>

@@ -1,0 +1,29 @@
+{
+  "total_samples": 100,
+  "overlap_size": 25,
+  "unique_samples": 75,
+  "num_evaluators": 3,
+  "samples_per_evaluator": 50,
+  "extra_samples_for_some": false,
+  "seed": 999,
+  "assignments": {
+    "0": {
+      "evaluator_id": 0,
+      "total_samples": 50,
+      "overlap_samples": 25,
+      "unique_samples": 25
+    },
+    "1": {
+      "evaluator_id": 1,
+      "total_samples": 50,
+      "overlap_samples": 25,
+      "unique_samples": 25
+    },
+    "2": {
+      "evaluator_id": 2,
+      "total_samples": 50,
+      "overlap_samples": 25,
+      "unique_samples": 25
+    }
+  }
+}
