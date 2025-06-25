@@ -181,6 +181,13 @@ class HybridEvaluationSystem {
         document.getElementById('current-sample').textContent = this.currentSampleIndex + 1;
         document.getElementById('total-samples').textContent = this.evaluatorSamples.length;
         
+        // Update navigation controls
+        const sampleInput = document.getElementById('sample-number-input');
+        if (sampleInput) {
+            sampleInput.max = this.evaluatorSamples.length;
+            sampleInput.value = this.currentSampleIndex + 1;
+        }
+        
         // Update assignment type indicator
         const assignmentType = this.currentSample.assignment_type || 'unknown';
         const indicator = document.getElementById('assignment-type-indicator');
@@ -338,6 +345,23 @@ class HybridEvaluationSystem {
         this.displayCurrentSample();
     }
 
+    previousSample() {
+        if (this.currentSampleIndex > 0) {
+            this.currentSampleIndex--;
+            this.displayCurrentSample();
+        }
+    }
+
+    goToSample(sampleNumber) {
+        const index = sampleNumber - 1; // Convert to 0-based index
+        if (index >= 0 && index < this.evaluatorSamples.length) {
+            this.currentSampleIndex = index;
+            this.displayCurrentSample();
+            return true;
+        }
+        return false;
+    }
+
     showCompletionMessage() {
         const container = document.getElementById('evaluation-interface');
         container.innerHTML = `
@@ -346,9 +370,6 @@ class HybridEvaluationSystem {
                 <p>You have completed all ${this.evaluatorSamples.length} assigned samples.</p>
                 <p>Each evaluation has been automatically downloaded as you completed it.</p>
                 <p><strong>Thank you for your participation!</strong></p>
-                <div class="download-section">
-                    <button class="btn btn-success" onclick="downloadResults()">Download Combined Results</button>
-                </div>
             </div>
         `;
     }
@@ -381,25 +402,6 @@ class HybridEvaluationSystem {
         URL.revokeObjectURL(url);
     }
 
-    downloadResults() {
-        const data = {
-            evaluator_id: this.evaluatorId,
-            total_evaluations: this.completedEvaluations.length,
-            export_timestamp: new Date().toISOString(),
-            assignment_info: this.assignmentConfig,
-            evaluations: this.completedEvaluations
-        };
-
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `evaluator_${this.evaluatorId}_results_${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    }
 
     showError(message) {
         const container = document.getElementById('error-container');
@@ -520,9 +522,22 @@ function nextSample() {
     evaluationSystem.nextSample();
 }
 
-function downloadResults() {
-    evaluationSystem.downloadResults();
+function previousSample() {
+    evaluationSystem.previousSample();
 }
+
+function goToSample() {
+    const input = document.getElementById('sample-number-input');
+    const sampleNumber = parseInt(input.value);
+    
+    if (isNaN(sampleNumber) || sampleNumber < 1 || sampleNumber > evaluationSystem.evaluatorSamples.length) {
+        evaluationSystem.showError(`Please enter a valid sample number (1-${evaluationSystem.evaluatorSamples.length})`);
+        return;
+    }
+    
+    evaluationSystem.goToSample(sampleNumber);
+}
+
 
 // Initialize the system when page loads
 document.addEventListener('DOMContentLoaded', function() {
@@ -533,4 +548,34 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('User already authenticated in this session');
         // Could auto-show interface or keep auth gate for evaluator ID selection
     }
+    
+    // Add keyboard navigation
+    document.addEventListener('keydown', function(event) {
+        // Only handle navigation when evaluation interface is visible and no input is focused
+        const evaluationInterface = document.getElementById('evaluation-interface');
+        const isEvaluationVisible = evaluationInterface && evaluationInterface.style.display !== 'none' && evaluationSystem.evaluatorSamples;
+        const isInputFocused = document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA';
+        
+        // Handle Enter key on sample number input
+        if (isInputFocused && document.activeElement.id === 'sample-number-input' && event.key === 'Enter') {
+            event.preventDefault();
+            goToSample();
+            return;
+        }
+        
+        if (!isEvaluationVisible || isInputFocused) {
+            return;
+        }
+        
+        switch(event.key) {
+            case 'ArrowLeft':
+                event.preventDefault();
+                evaluationSystem.previousSample();
+                break;
+            case 'ArrowRight':
+                event.preventDefault();
+                evaluationSystem.nextSample();
+                break;
+        }
+    });
 });

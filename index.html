@@ -268,6 +268,14 @@
             .response-options {
                 grid-template-columns: 1fr;
             }
+            .progress-info > div:first-child {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .progress-info > div:first-child > div:last-child {
+                margin-top: 10px;
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
@@ -306,8 +314,22 @@
         <div class="evaluation-interface" id="evaluation-interface">
             <!-- Progress Info -->
             <div class="progress-info" id="progress-info">
-                <strong>Progress:</strong> <span id="current-sample">0</span> of <span id="total-samples">0</span> completed
-                <span id="assignment-type-indicator"></span>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <strong>Progress:</strong> <span id="current-sample">0</span> of <span id="total-samples">0</span>
+                        <span id="assignment-type-indicator"></span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="previousSample()" style="padding: 8px 12px; font-size: 14px;">← Previous</button>
+                        <span style="font-size: 14px;">Go to:</span>
+                        <input type="number" id="sample-number-input" min="1" max="100" style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 3px;">
+                        <button class="btn btn-secondary" onclick="goToSample()" style="padding: 8px 12px; font-size: 14px;">Go</button>
+                        <button class="btn btn-secondary" onclick="nextSample()" style="padding: 8px 12px; font-size: 14px;">Next →</button>
+                    </div>
+                </div>
+                <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                    💡 <strong>Tip:</strong> Use ← → arrow keys to navigate between samples
+                </div>
             </div>
 
             <!-- Paper Information -->
@@ -361,10 +383,7 @@
 
             <!-- Results Info -->
             <div class="results-info" id="results-info" style="display: none;">
-                <p><strong>Evaluation completed!</strong> Your response has been automatically downloaded and saved locally.</p>
-                <div class="download-section">
-                    <button class="btn" onclick="downloadResults()">Download All Results</button>
-                </div>
+                <p><strong>Evaluation completed!</strong> Your response has been automatically downloaded.</p>
             </div>
         </div>
 
